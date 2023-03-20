@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
             }
             else
             {
-                binding.tvApiGivenWord.text = "Connection Failed"
+                binding.tvApiEngDefinition.text = "Connection Failed"
             }
 
         }
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 binding.tvApiStatus.text = request.meta.toString()
                 binding.tvApiJapWord.text = request.data[0].slug.toString()
                 binding.tvApiJapReading.text = ""
-                binding.tvApiGivenWord.text = ""
+                binding.tvApiEngDefinition.text = ""
                 //println("Request data is:")
                 //println(request.data[0].slug.toString())
 
