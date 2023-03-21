@@ -48,20 +48,25 @@ class MainActivity : AppCompatActivity() {
     private fun updateUITest(request: ApiRequest) {
         runOnUiThread {
             kotlin.run {
-                binding.tvApiStatus.text = "Status: OK"
-                binding.tvApiJapWord.text = request.data[0].japanese[0].word
-                binding.tvApiJapReading.text = request.data[0].japanese[0].reading
+                if (request.data.isNotEmpty()) {
+                    binding.tvApiStatus.text = "Status: OK"
+                    binding.tvApiJapWord.text = request.data[0].japanese[0].word
+                    binding.tvApiJapReading.text = request.data[0].japanese[0].reading
 
-                val count = request.data[0].senses[0].english_definitions.size -1
+                    val count = request.data[0].senses[0].english_definitions.size - 1
 
-                var englishDef = ""
+                    var englishDef = ""
 
-                for(n in 0..count) {
-                    englishDef += request.data[0].senses[0].english_definitions[n]+",\n"
+                    for (n in 0..count) {
+                        englishDef += request.data[0].senses[0].english_definitions[n] + ",\n"
+                    }
+
+                    binding.tvApiEngDefinition.text = englishDef
+
                 }
-
-                binding.tvApiEngDefinition.text = englishDef
-
+                else {
+                    binding.tvApiStatus.text = "Status: Word not found"
+                }
             }
         }
     }
