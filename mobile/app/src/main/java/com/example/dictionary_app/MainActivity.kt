@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import com.example.dictionary_app.databinding.ActivityMainBinding
 import com.google.gson.Gson
 import java.io.InputStreamReader
@@ -34,31 +33,37 @@ class MainActivity : AppCompatActivity() {
                 val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
                 val request = Gson().fromJson(inputStreamReader, ApiRequest::class.java)
 
-                updateUI(request)
+                updateUITest(request)
                 inputStreamReader.close()
                 inputSystem.close()
             }
             else
             {
-                binding.tvApiEngDefinition.text = "Connection Failed"
+                binding.tvApiStatus.text = "Status: Connection Failed"
             }
 
         }
     }
 
-    private fun updateUI(request: ApiRequest) {
+    private fun updateUITest(request: ApiRequest) {
         runOnUiThread {
             kotlin.run {
-                binding.tvApiStatus.text = request.meta.toString()
-                binding.tvApiJapWord.text = request.data[0].slug.toString()
-                binding.tvApiJapReading.text = ""
-                binding.tvApiEngDefinition.text = ""
-                //println("Request data is:")
-                //println(request.data[0].slug.toString())
+                binding.tvApiStatus.text = "Status: OK"
+                binding.tvApiJapWord.text = request.data[0].japanese[0].word
+                binding.tvApiJapReading.text = request.data[0].japanese[0].reading
+
+                val count = request.data[0].senses[0].english_definitions.size -1
+
+                var englishDef = ""
+
+                for(n in 0..count) {
+                    englishDef += request.data[0].senses[0].english_definitions[n]+",\n"
+                }
+
+                binding.tvApiEngDefinition.text = englishDef
 
             }
         }
-
     }
 
     fun onClickGetFromApi(view: View?) {
