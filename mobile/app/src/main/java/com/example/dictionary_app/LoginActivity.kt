@@ -3,6 +3,10 @@ package com.example.dictionary_app
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.dictionary_app.databinding.ActivityLoginBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -24,13 +28,25 @@ class LoginActivity : AppCompatActivity() {
 
         val username = binding.etUsername.text.toString()
         val password = binding.etPassword.text.toString()
+        println(username)
+        println(password)
 
-        loginRequest(username, password)
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val result = loginRequest(username, password)
+                // Handle the successful response here
+                println(result)
+            } catch (e: Exception) {
+                // Handle the error here
+                println(e.message)
+
+            }
+        }
 
     }
-    fun loginRequest(username: String, password: String){
+    private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://localhost:8000/login")
+        val url = URL("http://{server ip here}:3000/login")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
