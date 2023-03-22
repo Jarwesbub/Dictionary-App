@@ -24,11 +24,11 @@ class FlashCard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flash_card)
 
-        var nextButton = findViewById<Button>(R.id.button)
-        val questionText = findViewById<TextView>(R.id.textView5)
+        var nextButton = findViewById<Button>(R.id.buttonNext)
+        val questionText = findViewById<TextView>(R.id.textViewFlashcard)
 
         val answerEditText =findViewById<EditText>(R.id.etAnswerInput)
-        val pointsTextView = findViewById<TextView>(R.id.tvPoints)
+        val pointsTextView = findViewById<TextView>(R.id.textViewPoints)
 
         updateQuestion()
 
@@ -65,7 +65,7 @@ class FlashCard : AppCompatActivity() {
     private fun updateQuestion() {
         currentQuestionIndex = (0 until questionList.size).random()
         val currentQuestion = questionList[currentQuestionIndex]
-        val questionText = findViewById<TextView>(R.id.textView5)
+        val questionText = findViewById<TextView>(R.id.textViewFlashcard)
         questionText.text = currentQuestion.kanji
     }
 }
