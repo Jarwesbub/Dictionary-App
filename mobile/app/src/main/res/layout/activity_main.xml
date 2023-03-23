@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
@@ -17,13 +17,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buFlashCardActivity"
+        android:id="@+id/btnGoToLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        android:text="Go to login"
+        app:layout_constraintEnd_toEndOf="@+id/textView"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
