@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //add a settings button on the tools bar
+        //add a menu button on the tools bar
         menuInflater.inflate(R.menu.menubuttons, menu)
         return true
     }

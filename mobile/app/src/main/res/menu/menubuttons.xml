@@ -9,13 +9,18 @@
         android:title="Settings">
     <menu>
         <item
-            android:id="@+id/subPasswordChange"
-            android:title="[Place Holder]"
+            android:id="@+id/tbSettings"
+            android:title="Settings"
             android:orderInCategory="10"
             android:visible="true" />
         <item
-            android:id="@+id/subUserSettings"
-            android:title="[Place Holder]"
+            android:id="@+id/tbLicences"
+            android:title="Licences"
+            android:orderInCategory="20"
+            android:visible="true" />
+        <item
+            android:id="@+id/tbAbout"
+            android:title="About"
             android:orderInCategory="20"
             android:visible="true" />
     </menu>
