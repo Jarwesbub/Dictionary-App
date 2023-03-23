@@ -20,6 +20,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+
+        binding.buFlashCard.setOnClickListener {
+            val intent = Intent(this, FlashCardActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun onClickGoToSearch(view: View) { //Test button

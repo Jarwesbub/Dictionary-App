@@ -5,11 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import org.w3c.dom.Text
 
 data class Question(val kanji: String, val meaning: String)
 
-class FlashCard : AppCompatActivity() {
+class FlashCardActivity : AppCompatActivity() {
     private val questionList = mutableListOf(
         Question("一", "one"),
         Question("茶", "tea"),
