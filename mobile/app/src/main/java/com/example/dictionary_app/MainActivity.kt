@@ -3,6 +3,7 @@ package com.example.dictionary_app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.example.dictionary_app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,5 +20,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    fun onClickGoToSearch(view: View) { //Test button
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(intent)
     }
 }
