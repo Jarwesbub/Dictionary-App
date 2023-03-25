@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
     // If the username is taken, it sends a 409 (Conflict) response with the message "name taken."
     if (isUsernameTaken) {
       res.status(409).send("name taken.");
-    } 
+    }
     // If the username is not taken, proceed with signup by hashing provided password and updating database with user records
     else {
       const salt = await bcrypt.genSalt();
@@ -28,6 +28,7 @@ router.post("/", async (req, res) => {
       res.status(200).json(response);
     }
   } catch (error) {
+    // If there is an error during the process, it sends a 500 (Internal Server Error) response and logs the error message to the console.
     console.error(error);
     res.sendStatus(500);
   }
