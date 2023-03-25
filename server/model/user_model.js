@@ -20,16 +20,6 @@ getUserByName = (username) => {
   });
 };
 
-getUser = (username, password) => {
-  const query = "SELECT * FROM users WHERE user_name=?"
-  return new Promise((resolve, reject) => {
-    database.query(query, [username], (error, result) => {
-      if (error) reject(error);
-      resolve(result);
-    });
-  });
-};
-
 createUser = (username, password) => {
   const query = "INSERT INTO users (user_name, user_password) VALUES (?,?)";
   return new Promise((resolve, reject) => {
@@ -62,7 +52,6 @@ UpdateUser = (userId, username, password) => {
 
 module.exports = {
   getUsers,
-  getUser,
   getUserByName,
   createUser,
   deleteUser,
