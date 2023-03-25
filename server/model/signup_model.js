@@ -1,4 +1,4 @@
-const database = require("../database");
+const database = require("../utils/database");
 
 getAllUsers = () => {
   const query = "SELECT user_name FROM users";

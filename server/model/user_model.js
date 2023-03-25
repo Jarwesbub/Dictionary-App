@@ -1,4 +1,4 @@
-const database = require("../database");
+const database = require("../utils/database");
 
 getUsers = () => {
   const query = "SELECT * FROM users";
@@ -21,9 +21,9 @@ getUserByName = (username) => {
 };
 
 getUser = (username, password) => {
-  const query = "SELECT * FROM users WHERE user_name = ? AND user_password = ?"
+  const query = "SELECT * FROM users WHERE user_name=?"
   return new Promise((resolve, reject) => {
-    database.query(query, [username,password], (error, result) => {
+    database.query(query, [username], (error, result) => {
       if (error) reject(error);
       resolve(result);
     });
@@ -62,6 +62,7 @@ UpdateUser = (userId, username, password) => {
 
 module.exports = {
   getUsers,
+  getUser,
   getUserByName,
   createUser,
   deleteUser,
