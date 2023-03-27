@@ -47,16 +47,19 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="342dp"
-        android:layout_height="560dp"
+    <LinearLayout
+        android:id="@+id/liLayoutParent"
+        android:layout_width="301dp"
+        android:layout_height="508dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/liLayoutSearch">
 
         <LinearLayout
-            android:id="@+id/liLayoutWord"
-            android:layout_width="342dp"
+            android:id="@+id/liLayoutFirstWord"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="#DADADA"
@@ -64,19 +67,16 @@
             android:paddingStart="16dp"
             android:paddingTop="8dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/liLayoutSearch">
+            android:paddingBottom="8dp">
 
             <LinearLayout
-                android:id="@+id/liLayoutUpper"
+                android:id="@+id/liLayoutUpper0"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvApiJapWord"
+                    android:id="@+id/tvApiJapWord0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="今日は"
@@ -85,7 +85,7 @@
                     android:textSize="28sp" />
 
                 <TextView
-                    android:id="@+id/tvApiJapReading"
+                    android:id="@+id/tvApiJapReading0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="2dp"
@@ -96,7 +96,7 @@
                     android:textStyle="italic" />
 
                 <TextView
-                    android:id="@+id/tvApiJapRomaji"
+                    android:id="@+id/tvApiJapRomaji0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
@@ -108,13 +108,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/liLayoutBottom"
+                android:id="@+id/liLayoutBottom0"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvApiEngDefinition"
+                    android:id="@+id/tvApiEngDefinition0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -126,5 +126,144 @@
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/liLayoutSecondWord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#DADADA"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/liLayoutUpper1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvApiJapWord1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日は"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/tvApiJapReading1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="2dp"
+                    android:text="こんにち"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tvApiJapRomaji1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:paddingStart="8dp"
+                    android:text="konnichiha"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/liLayoutBottom1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvApiEngDefinition1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="hello, good day, good afternoon,"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/liLayoutThirdWord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#DADADA"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
+
+            <LinearLayout
+                android:id="@+id/liLayoutUpper2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvApiJapWord2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="今日は"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:id="@+id/tvApiJapReading2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="2dp"
+                    android:text="こんにち"
+                    android:textAlignment="textStart"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tvApiJapRomaji2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:paddingStart="8dp"
+                    android:text="konnichiha"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/liLayoutBottom2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvApiEngDefinition2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="hello, good day, good afternoon,"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
