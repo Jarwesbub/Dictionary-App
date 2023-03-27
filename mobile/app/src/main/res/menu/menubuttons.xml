@@ -21,7 +21,7 @@
         <item
             android:id="@+id/tbAbout"
             android:title="About"
-            android:orderInCategory="20"
+            android:orderInCategory="30"
             android:visible="true" />
     </menu>
     </item>
