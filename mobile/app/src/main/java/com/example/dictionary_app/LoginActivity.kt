@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
+import com.google.gson.Gson
 
 class LoginActivity : AppCompatActivity() {
 
@@ -44,6 +45,14 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun parseTokens(tokens: String){
+        // Parse JSON string using Gson into an instance of Token class
+        val tokenData = Gson().fromJson(tokens, TokenData::class.java)
+        println(tokenData.accessToken)
+        println(tokenData.refreshToken)
+    }
+
     private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://{server ip here}:3000/login")
@@ -73,6 +82,8 @@ class LoginActivity : AppCompatActivity() {
             // Request successful - read the response data into a string and print it to the console
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
+            // Send JSON string to parseTokens function
+            parseTokens(response)
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
