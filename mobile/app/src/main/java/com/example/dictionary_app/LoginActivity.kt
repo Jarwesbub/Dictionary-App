@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {onLoginClick()}
     }
 
-    fun onLoginClick(){
+    private fun onLoginClick(){
 
         val username = binding.etUsername.text.toString()
         val password = binding.etPassword.text.toString()
