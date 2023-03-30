@@ -1,13 +1,14 @@
 package com.example.dictionary_app
 
+import android.R
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import com.example.dictionary_app.databinding.ActivityFlashCardBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
 
 data class Question(val kanji: String, val meaning: String)
 
@@ -26,6 +27,9 @@ data class KanjiEntry(
 
 
 class FlashCardActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityFlashCardBinding;
+
     private val questionList = mutableListOf(
         Question("一", "one"),
         Question("茶", "tea"),
@@ -42,21 +46,33 @@ class FlashCardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_flash_card)
+        binding = ActivityFlashCardBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        var nextButton = findViewById<Button>(R.id.buttonNext)
-        val questionText = findViewById<TextView>(R.id.textViewFlashcard)
 
-        val answerEditText =findViewById<EditText>(R.id.etAnswerInput)
-        val pointsTextView = findViewById<TextView>(R.id.textViewPoints)
+        var nextButton = binding.buttonNext
+        val questionText = binding.textViewFlashcard
+
+        val answerEditText = binding.etAnswerInput
+        val pointsTextView = binding.textViewPoints
 
         updateQuestion()
 
         //Read the json file into variable from assets folder
         getKanjiFromJson(applicationContext)
 
+        val spinner = binding.spnrDifficulty
+        val items = arrayOf("Easy", "Medium", "Hard")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, items)
+        spinner.apply {
+            adapter = spinnerAdapter
+            prompt = ""
+        }
 
-        /*nextButton.setOnClickListener {
+
+
+        nextButton.setOnClickListener {
             val userAnswer = answerEditText.text.toString()
             val currentQuestion = questionList[currentQuestionIndex]
             if (userAnswer == currentQuestion.meaning) {
@@ -71,8 +87,8 @@ class FlashCardActivity : AppCompatActivity() {
                 updateQuestion()
             }
             answerEditText.setText("")
-        }*/
-        nextButton.setOnClickListener {
+        }
+        /*nextButton.setOnClickListener {
             if (kanjiList1.isNotEmpty()) {
                 val currentKanji = kanjiList1.first()
                 questionText.text = "${currentKanji.kanjiChar}: ${currentKanji.kanji.wk_meanings}"
@@ -81,7 +97,7 @@ class FlashCardActivity : AppCompatActivity() {
                 questionText.text = "No more kanji in list 1"
                 nextButton.isEnabled = false
             }
-        }
+        }*/
 
 
 
@@ -102,7 +118,7 @@ class FlashCardActivity : AppCompatActivity() {
     private fun updateQuestion() {
         currentQuestionIndex = (0 until questionList.size).random()
         val currentQuestion = questionList[currentQuestionIndex]
-        val questionText = findViewById<TextView>(R.id.textViewFlashcard)
+        val questionText = binding.textViewFlashcard
         questionText.text = currentQuestion.kanji
     }
 
