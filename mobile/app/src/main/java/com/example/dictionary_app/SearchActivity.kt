@@ -1,13 +1,9 @@
 package com.example.dictionary_app
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dictionary_app.databinding.ActivitySearchBinding
 import com.google.gson.Gson
@@ -32,7 +28,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun resetAllText(){
+    private fun resetAllText() {
         binding.tvApiJapWord0.text = ""
         binding.tvApiJapReading0.text = ""
         binding.tvApiJapRomaji0.text = ""
