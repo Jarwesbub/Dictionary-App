@@ -49,8 +49,12 @@ class LoginActivity : AppCompatActivity() {
     private fun parseTokens(tokens: String){
         // Parse JSON string using Gson into an instance of Token class
         val tokenData = Gson().fromJson(tokens, TokenData::class.java)
-        println(tokenData.accessToken)
-        println(tokenData.refreshToken)
+        val accessToken = tokenData.accessToken
+        val refreshToken = tokenData.refreshToken
+        println(accessToken)
+        println(refreshToken)
+        prefs.writeTokens(accessToken,refreshToken)
+
     }
 
     private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
