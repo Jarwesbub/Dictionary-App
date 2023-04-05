@@ -71,7 +71,7 @@ class SearchActivity : AppCompatActivity() {
         var inputText:EditText = findViewById(R.id.etApiTest)
 
         if(inputText.text.isNotEmpty()) {
-            inputWord = inputText.text.toString()
+            inputWord = inputText.text.toString().lowercase()
             fetchJsonData().start()
         }
     }
