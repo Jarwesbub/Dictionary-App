@@ -1,10 +1,12 @@
 package com.example.dictionary_app
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.example.dictionary_app.databinding.ActivitySearchBinding
 import com.google.gson.Gson
 import dev.esnault.wanakana.core.Wanakana
@@ -13,10 +15,10 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
-var inputWord: (String?) = null;
+var inputWord: (String?) = null
 
 class SearchActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySearchBinding;
+    private lateinit var binding: ActivitySearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,22 @@ class SearchActivity : AppCompatActivity() {
 
         binding.tvApiStatus.text = ""
         resetAllText()
+
+        val firstFav = binding.buFavourite0
+        firstFav.tag = "off"
+        firstFav.setOnClickListener {
+            addWordToFavourite(firstFav)
+        }
+        val secondFav = binding.buFavourite1
+        secondFav.tag = "off"
+        secondFav.setOnClickListener {
+            addWordToFavourite(secondFav)
+        }
+        val thirdFav = binding.buFavourite2
+        thirdFav.tag = "off"
+        thirdFav.setOnClickListener {
+            addWordToFavourite(thirdFav)
+        }
 
     }
 
@@ -41,9 +59,12 @@ class SearchActivity : AppCompatActivity() {
         binding.tvApiJapReading2.text = ""
         binding.tvApiJapRomaji2.text = ""
         binding.tvApiEngDefinition2.text = ""
-        binding.liLayoutFirstWord.setBackgroundColor(Color.WHITE)
-        binding.liLayoutSecondWord.setBackgroundColor(Color.WHITE)
-        binding.liLayoutThirdWord.setBackgroundColor(Color.WHITE)
+
+        binding.llFirstWord.isVisible = false
+        binding.llSecondWord.isVisible = false
+        binding.llThirdWord.isVisible = false
+
+
     }
 
     fun onClickGetFromApi(view: View?) {
@@ -72,7 +93,6 @@ class SearchActivity : AppCompatActivity() {
             else {
                 binding.tvApiStatus.text = "Status: Connection Failed"
             }
-
         }
     }
 
@@ -101,30 +121,70 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun createLayout(index: Int?, word: String?, reading: String?, englishDefinition: String?) {
+    private fun createLayout(index: Int?, japWord: String?, japReading: String?, englishDefinition: String?) {
+        val maxWordWidth = 4
+        val maxReadingWidth = 6
+        var word = japWord
+        var reading = japReading
+
+        if(japWord != null && japWord.length>maxWordWidth) {
+            word = ""
+            val wordArray = japWord.chunked(maxWordWidth)
+            for(w in wordArray) {
+                word += w + "\n"
+            }
+        }
+
+        if(japReading != null && japReading.length>maxWordWidth) {
+            reading = ""
+            val readingArray = japReading.chunked(maxReadingWidth)
+            for(w in readingArray) {
+                reading += w + "\n"
+            }
+        }
 
         if(index===0) {
             binding.tvApiJapWord0.text = word
             binding.tvApiJapReading0.text = reading
             binding.tvApiJapRomaji0.text = Wanakana.toRomaji(reading.toString())
             binding.tvApiEngDefinition0.text = englishDefinition
-            binding.liLayoutFirstWord.setBackgroundColor(Color.LTGRAY)
+            binding.llFirstWord.isVisible = true
 
         } else if(index===1) {
             binding.tvApiJapWord1.text = word
             binding.tvApiJapReading1.text = reading
-            binding.tvApiJapRomaji1.text = Wanakana.toRomaji(reading.toString())
+            binding.tvApiJapRomaji1.text = Wanakana.toRomaji(japReading.toString())
             binding.tvApiEngDefinition1.text = englishDefinition
-            binding.liLayoutSecondWord.setBackgroundColor(Color.LTGRAY)
-
+            binding.llSecondWord.isVisible = true
         }
         else {
             binding.tvApiJapWord2.text = word
             binding.tvApiJapReading2.text = reading
-            binding.tvApiJapRomaji2.text = Wanakana.toRomaji(reading.toString())
+            binding.tvApiJapRomaji2.text = Wanakana.toRomaji(japReading.toString())
             binding.tvApiEngDefinition2.text = englishDefinition
-            binding.liLayoutThirdWord.setBackgroundColor(Color.LTGRAY)
+            binding.llThirdWord.isVisible = true
         }
     }
 
-}
+    private fun addWordToFavourite(starButton: ImageButton) {
+
+            if (starButton.tag==="off") {
+                starButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        android.R.drawable.btn_star_big_on
+                    )
+                )
+                starButton.tag="on"
+            } else {
+                starButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        android.R.drawable.btn_star_big_off
+                    )
+                )
+                starButton.tag="off"
+            }
+        }
+
+    }
