@@ -1,7 +1,10 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/spinner_background" />
-    <item
-        android:drawable="@drawable/ic_baseline_arrow_drop_down_24"
-        android:gravity="end|center_vertical"
-        android:paddingEnd="8dp" />
+    <item>
+        <bitmap
+            android:gravity="end|center_vertical"
+            android:paddingEnd="8dp"
+            android:src="@android:drawable/arrow_down_float"
+            android:tint="@color/black" />
+    </item>
 </layer-list>
