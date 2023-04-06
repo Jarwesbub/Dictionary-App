@@ -32,6 +32,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.buFavWords.setOnClickListener {
+            val intent = Intent(this, WordListActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

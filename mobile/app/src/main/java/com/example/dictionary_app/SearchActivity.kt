@@ -26,18 +26,20 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.tvApiStatus.text = ""
-        resetAllText()
+        resetAll()
 
         val firstFav = binding.buFavourite0
         firstFav.tag = "off"
         firstFav.setOnClickListener {
             addWordToFavourite(firstFav)
         }
+
         val secondFav = binding.buFavourite1
         secondFav.tag = "off"
         secondFav.setOnClickListener {
             addWordToFavourite(secondFav)
         }
+
         val thirdFav = binding.buFavourite2
         thirdFav.tag = "off"
         thirdFav.setOnClickListener {
@@ -46,7 +48,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun resetAllText() {
+    private fun resetAll() {
         binding.tvApiJapWord0.text = ""
         binding.tvApiJapReading0.text = ""
         binding.tvApiJapRomaji0.text = ""
@@ -64,6 +66,9 @@ class SearchActivity : AppCompatActivity() {
         binding.llSecondWord.isVisible = false
         binding.llThirdWord.isVisible = false
 
+        resetFavouriteButton(binding.buFavourite0)
+        resetFavouriteButton(binding.buFavourite1)
+        resetFavouriteButton(binding.buFavourite2)
 
     }
 
@@ -101,7 +106,7 @@ class SearchActivity : AppCompatActivity() {
             kotlin.run {
                 if (request.data.isNotEmpty()) {
                     binding.tvApiStatus.text = "Status: OK"
-                    resetAllText()
+                    resetAll()
 
                     var index = 2
                     if(request.data.size-1<index) {
@@ -166,24 +171,35 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun addWordToFavourite(starButton: ImageButton) {
 
-            if (starButton.tag==="off") {
-                starButton.setImageDrawable(
+    private fun resetFavouriteButton(favButton: ImageButton) {
+        favButton.tag = "off"
+        favButton.setImageDrawable(
+            ContextCompat.getDrawable(
+                applicationContext,
+                android.R.drawable.btn_star_big_off
+            )
+        )
+    }
+
+    private fun addWordToFavourite(favButton: ImageButton) {
+
+            if (favButton.tag==="off") {         // Add to favorites list
+                favButton.setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         android.R.drawable.btn_star_big_on
                     )
                 )
-                starButton.tag="on"
-            } else {
-                starButton.setImageDrawable(
+                favButton.tag="on"
+            } else {                            // Remove from favourites list
+                favButton.setImageDrawable(
                     ContextCompat.getDrawable(
                         applicationContext,
                         android.R.drawable.btn_star_big_off
                     )
                 )
-                starButton.tag="off"
+                favButton.tag="off"
             }
         }
 
