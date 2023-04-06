@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.dictionary_app.databinding.ActivityFlashCardBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dev.esnault.wanakana.core.Wanakana
+import android.view.View
 
-
-data class Question(val kanji: String, val meaning: String)
+data class Question(val kanji: String, val meaning: String, val reading: String)
 
 data class Kanji(
     val grade: Int,
@@ -31,10 +32,10 @@ class FlashCardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFlashCardBinding;
 
     private val questionList = mutableListOf(
-        Question("一", "one"),
-        Question("茶", "tea"),
-        Question("日", "day"),
-        Question("月", "month")
+        Question("一", "one", "ichi"),
+        Question("茶", "tea", "ni"),
+        Question("日", "day", "san"),
+        Question("月", "month", "yon")
     )
 
     private val kanjiList1 = mutableListOf<KanjiEntry>() //Grades 1-2
@@ -68,6 +69,40 @@ class FlashCardActivity : AppCompatActivity() {
         spinner.apply {
             adapter = spinnerAdapter
             prompt = ""
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Set the selected kanji list based on the selected difficulty level
+                    val selectedKanjiList = when (position) {
+                        0 -> kanjiList1
+                        1 -> kanjiList2
+                        2 -> kanjiList3
+                        else -> emptyList() // handle any other positions, if needed
+                    }
+
+                    // Clear the existing questions and add the new ones from the selected kanji list
+                    questionList.clear()
+                    questionList.addAll(selectedKanjiList.map {
+                        Question(
+                            kanji = it.kanjiChar,
+                            meaning = it.kanji.wk_meanings.firstOrNull() ?: "",
+                            reading = it.kanji.wk_readings_kun.firstOrNull() ?: ""
+                        )
+                    })
+
+                    // Show the first question and reset points
+                    points = 0
+                    pointsTextView.text = "Points: $points"
+                    updateQuestion()
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
+                }
+            }
         }
 
 
@@ -75,12 +110,12 @@ class FlashCardActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             val userAnswer = answerEditText.text.toString()
             val currentQuestion = questionList[currentQuestionIndex]
-            if (userAnswer == currentQuestion.meaning) {
+            if (userAnswer.equals(currentQuestion.meaning, ignoreCase = true)) {
                 points++
                 pointsTextView.text = "Points: $points"
                 questionList.removeAt(currentQuestionIndex)
             }
-            if (questionList.isEmpty()) {
+            if (questionList.isEmpty() || points >= 5) {
                 nextButton.isEnabled = false
                 questionText.text = "You win!"
             } else {
@@ -88,21 +123,6 @@ class FlashCardActivity : AppCompatActivity() {
             }
             answerEditText.setText("")
         }
-        /*nextButton.setOnClickListener {
-            if (kanjiList1.isNotEmpty()) {
-                val currentKanji = kanjiList1.first()
-                questionText.text = "${currentKanji.kanjiChar}: ${currentKanji.kanji.wk_meanings}"
-                kanjiList1.removeAt(0)
-            } else {
-                questionText.text = "No more kanji in list 1"
-                nextButton.isEnabled = false
-            }
-        }*/
-
-
-
-
-
 
         answerEditText.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -119,7 +139,11 @@ class FlashCardActivity : AppCompatActivity() {
         currentQuestionIndex = (0 until questionList.size).random()
         val currentQuestion = questionList[currentQuestionIndex]
         val questionText = binding.textViewFlashcard
-        questionText.text = currentQuestion.kanji
+        val questionReadingText = binding.textViewFlashcardReading
+        questionText.text = "${currentQuestion.kanji}: ${currentQuestion.meaning}"
+        //For reasons that aren't related to this project, some of the readings have ! which is removed here
+        val reading = Wanakana.toRomaji(currentQuestion.reading).replace("!", "")
+        questionReadingText.text = reading
     }
 
     private fun getKanjiFromJson(context: Context) {
