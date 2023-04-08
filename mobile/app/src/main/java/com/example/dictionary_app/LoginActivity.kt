@@ -1,5 +1,6 @@
 package com.example.dictionary_app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.dictionary_app.databinding.ActivityLoginBinding
@@ -23,6 +24,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.btnLogin.setOnClickListener {onLoginClick()}
+
+        binding.btnCreateUser.setOnClickListener { onCreateUserClick() }
+    }
+
+    private fun onCreateUserClick(){
+        val intent = Intent(this, SignUpActivity::class.java)
+        startActivity(intent)
     }
 
     private fun onLoginClick(){
