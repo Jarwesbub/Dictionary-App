@@ -88,10 +88,25 @@ class FlashCardActivity : AppCompatActivity() {
                     // Clear the existing questions and add the new ones from the selected kanji list
                     questionList.clear()
                     questionList.addAll(selectedKanjiList.map {
+                        //Selects the most appropriate reading, the non standard readings are marked with ! in json,
+                        //so this finds the first non ! mark reading to use.
+                        val reading = if (it.kanji.wk_readings_kun.isNotEmpty()) {
+                            val kunReading = it.kanji.wk_readings_kun.firstOrNull { r -> !r.startsWith("!") }
+                            if (kunReading != null) {
+                                kunReading
+                            } else {
+                                val onReading = it.kanji.wk_readings_on.firstOrNull { r -> !r.startsWith("!") }
+                                onReading ?: it.kanji.wk_readings_on[0]
+                            }
+                        } else {
+                            it.kanji.wk_readings_on.firstOrNull { r -> !r.startsWith("!") }
+                                ?: it.kanji.wk_readings_on[0]
+                        }
+
                         Question(
                             kanji = it.kanjiChar,
                             meaning = it.kanji.wk_meanings.firstOrNull() ?: "",
-                            reading = it.kanji.wk_readings_kun.firstOrNull() ?: ""
+                            reading = reading
                         )
                     })
 
@@ -147,8 +162,7 @@ class FlashCardActivity : AppCompatActivity() {
         val questionReadingText = binding.textViewFlashcardReading
         val hintText = binding.textViewFlashcardHint
         questionText.text = "${currentQuestion.kanji}"
-        //For reasons that aren't related to this project, some of the readings have ! which is removed here
-        val reading = Wanakana.toRomaji(currentQuestion.reading).replace("!", "")
+        val reading = Wanakana.toRomaji(currentQuestion.reading)
         questionReadingText.text = reading
         hintText.visibility = View.INVISIBLE
         hintText.text = makeHintString(currentQuestion.meaning)
