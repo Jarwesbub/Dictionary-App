@@ -54,6 +54,7 @@ class FlashCardActivity : AppCompatActivity() {
 
         var nextButton = binding.buttonNext
         val questionText = binding.textViewFlashcard
+        val hintText = binding.textViewFlashcardHint
 
         val answerEditText = binding.etAnswerInput
         val pointsTextView = binding.textViewPoints
@@ -133,6 +134,10 @@ class FlashCardActivity : AppCompatActivity() {
                 }
             }
         }
+
+        questionText.setOnClickListener {
+            hintText.visibility = View.VISIBLE
+        }
     }
 
     private fun updateQuestion() {
@@ -140,10 +145,13 @@ class FlashCardActivity : AppCompatActivity() {
         val currentQuestion = questionList[currentQuestionIndex]
         val questionText = binding.textViewFlashcard
         val questionReadingText = binding.textViewFlashcardReading
-        questionText.text = "${currentQuestion.kanji}: ${currentQuestion.meaning}"
+        val hintText = binding.textViewFlashcardHint
+        questionText.text = "${currentQuestion.kanji}"
         //For reasons that aren't related to this project, some of the readings have ! which is removed here
         val reading = Wanakana.toRomaji(currentQuestion.reading).replace("!", "")
         questionReadingText.text = reading
+        hintText.visibility = View.INVISIBLE
+        hintText.text = makeHintString(currentQuestion.meaning)
     }
 
     private fun getKanjiFromJson(context: Context) {
@@ -167,6 +175,21 @@ class FlashCardActivity : AppCompatActivity() {
                 else -> kanjiList3.add(kanjiEntry)
             }
         }
+    }
 
+    fun makeHintString(hint: String): String {
+        val formattedHint = StringBuilder()
+        formattedHint.append(hint.first())
+        for (i in 1 until hint.length - 1) {
+            if (hint[i] == ' ') {
+                formattedHint.append(" ")
+            } else if (i == 8 && hint.length > 9) {
+                formattedHint.append(hint[i])
+            } else {
+                formattedHint.append("_ ")
+            }
+        }
+        formattedHint.append(hint.last())
+        return formattedHint.toString()
     }
 }
