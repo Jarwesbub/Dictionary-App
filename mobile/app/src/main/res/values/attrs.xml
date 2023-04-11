@@ -1,0 +1,4 @@
+<resources>
+    <attr name="flashCardColor" format="reference" />
+    <attr name="textHighContrast" format="reference" />
+</resources>

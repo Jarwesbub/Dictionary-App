@@ -5,6 +5,6 @@
             android:gravity="end|center_vertical"
             android:paddingEnd="8dp"
             android:src="@android:drawable/arrow_down_float"
-            android:tint="@color/black" />
+            android:tint="?attr/colorOnBackground" />
     </item>
 </layer-list>
