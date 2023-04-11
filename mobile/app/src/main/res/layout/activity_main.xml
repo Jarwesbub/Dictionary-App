@@ -14,7 +14,7 @@
         android:onClick="onClickGoToSearch"
         android:text="Word Search"
         android:background="@drawable/button_background"
-        app:layout_constraintBottom_toTopOf="@id/button2"
+        app:layout_constraintBottom_toTopOf="@id/buFavWords"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,7 +22,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buFavWords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
@@ -46,7 +46,7 @@
         android:background="@drawable/button_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button2"
+        app:layout_constraintTop_toBottomOf="@id/buFavWords"
         app:layout_constraintBottom_toTopOf="@id/btnGoToLogin"
         app:layout_constraintVertical_chainStyle="packed" />
 
