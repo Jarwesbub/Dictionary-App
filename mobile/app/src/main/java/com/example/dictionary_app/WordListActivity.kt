@@ -17,7 +17,7 @@ class WordListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWordListBinding
     var gridView: GridView? = null
     private val wordsList = arrayOf(
-        "arigato", "konnichiwa", "Samurai", "Ninja", "Mizu", "Kaze", "Aoi"
+        "Arigato", "Konnichiwa", "Samurai", "Ninja", "Mizu", "Kaze", "Aoi"
 
     )
 
@@ -31,6 +31,7 @@ class WordListActivity : AppCompatActivity() {
         )
         gridView!!.adapter = adapter
         gridView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, v, position, id ->
+            // Testing
             Toast.makeText(
                 applicationContext,
                 (v as TextView).text, Toast.LENGTH_SHORT
