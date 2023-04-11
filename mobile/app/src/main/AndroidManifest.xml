@@ -37,6 +37,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+                <activity
+            android:name=".WordListActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".FlashCardActivity"
             android:exported="false">
