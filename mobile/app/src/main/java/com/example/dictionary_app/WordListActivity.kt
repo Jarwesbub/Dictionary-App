@@ -2,15 +2,11 @@ package com.example.dictionary_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
-import com.example.dictionary_app.databinding.ActivitySearchBinding
 import com.example.dictionary_app.databinding.ActivityWordListBinding
 
 class WordListActivity : AppCompatActivity() {
@@ -18,7 +14,7 @@ class WordListActivity : AppCompatActivity() {
     var gridView: GridView? = null
     // Testing
     private val wordsList = arrayOf(
-        "Hello", "Thanks", "Goodbye", "House", "Sun", "Moon"
+        "Hello", "Thanks", "Goodbye", "Morning", "House", "Sun", "Moon", "Tree", "Home"
 
     )
 
