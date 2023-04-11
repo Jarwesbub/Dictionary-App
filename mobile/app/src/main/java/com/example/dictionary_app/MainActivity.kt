@@ -47,19 +47,16 @@ class MainActivity : AppCompatActivity() {
         // Handles presses on the action bar items
         return when (item.itemId) {
             R.id.tbSettings -> {
-                Toast.makeText(applicationContext, "SETTINGS", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 true
             }
             R.id.tbLicences -> {
-                Toast.makeText(applicationContext, "LICENCES", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, LicencesActivity::class.java)
                 startActivity(intent)
                 true
             }
             R.id.tbAbout -> {
-                Toast.makeText(applicationContext, "ABOUT US", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, AboutUsActivity::class.java)
                 startActivity(intent)
                 true
