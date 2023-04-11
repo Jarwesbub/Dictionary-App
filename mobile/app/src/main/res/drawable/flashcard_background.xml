@@ -6,7 +6,7 @@
     <solid android:color="?attr/colorSecondary" />
 
     <!-- Rounded corners -->
-    <corners android:radius="16dp" />
+    <corners android:radius="0dp" />
 
     <!-- Padding -->
     <padding
