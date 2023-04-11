@@ -4,10 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.dictionary_app.databinding.ActivityMainBinding
 
 
@@ -31,12 +27,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.buApiSearch.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.buFavWords.setOnClickListener {
+            val intent = Intent(this, WordListActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
-    fun onClickGoToSearch(view: View) { //Test button
-        val intent = Intent(this, SearchActivity::class.java)
-        startActivity(intent)
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         //add a menu button on the tools bar
         menuInflater.inflate(R.menu.menubuttons, menu)

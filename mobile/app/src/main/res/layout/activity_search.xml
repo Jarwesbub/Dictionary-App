@@ -4,23 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animationCache="false"
+    android:background="@android:drawable/editbox_dropdown_light_frame"
     tools:context=".SearchActivity">
-
-    <TextView
-        android:id="@+id/tvApiStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status:"
-        app:layout_constraintBottom_toTopOf="@+id/liLayoutSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/liLayoutSearch"
         android:layout_width="340dp"
         android:layout_height="74dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,83 +41,257 @@
     </LinearLayout>
 
     <ScrollView
-        android:layout_width="342dp"
-        android:layout_height="560dp"
+        android:id="@+id/svWords"
+        android:layout_width="340dp"
+        android:layout_height="542dp"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:isScrollContainer="false"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/liLayoutSearch">
 
         <LinearLayout
-            android:id="@+id/liLayoutWord"
-            android:layout_width="342dp"
+            android:id="@+id/liLayoutParent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#DADADA"
-            android:orientation="vertical"
-            android:paddingStart="16dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/liLayoutSearch">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/liLayoutUpper"
+                android:id="@+id/llFirstWord"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:background="@android:drawable/editbox_dropdown_light_frame"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:id="@+id/llUpperBar0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/llJapLanguage0"
+                        android:layout_width="280dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvApiJapWord0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="今日は"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="32dp" />
+
+                        <TextView
+                            android:id="@+id/tvApiJapReading0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="こんにち"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="22dp"
+                            android:textStyle="italic" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/buFavourite0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="#00ffffff"
+                        android:src="@android:drawable/btn_star" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvApiJapWord"
+                    android:id="@+id/tvApiJapRomaji0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="今日は"
-                    android:textAlignment="textStart"
-                    android:textColor="#000000"
-                    android:textSize="28sp" />
-
-                <TextView
-                    android:id="@+id/tvApiJapReading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="2dp"
-                    android:text="こんにち"
-                    android:textAlignment="textStart"
-                    android:textColor="#000000"
-                    android:textSize="16sp"
-                    android:textStyle="italic" />
-
-                <TextView
-                    android:id="@+id/tvApiJapRomaji"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:paddingStart="8dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
                     android:text="konnichiha"
                     android:textColor="#000000"
-                    android:textSize="16sp"
+                    android:textSize="20dp"
                     android:textStyle="italic" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/liLayoutBottom"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvApiEngDefinition"
+                    android:id="@+id/tvApiEngDefinition0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="24dp"
                     android:text="hello, good day, good afternoon,"
                     android:textColor="#000000"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llSecondWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@android:drawable/editbox_dropdown_light_frame"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:id="@+id/llUpperBar1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/llJapLanguage1"
+                        android:layout_width="280dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvApiJapWord1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="今日は"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="32dp" />
+
+                        <TextView
+                            android:id="@+id/tvApiJapReading1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="こんにち"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="22dp"
+                            android:textStyle="italic" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/buFavourite1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="#00ffffff"
+                        android:src="@android:drawable/btn_star" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvApiJapRomaji1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="konnichiha"
+                    android:textColor="#000000"
+                    android:textSize="20dp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tvApiEngDefinition1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="hello, good day, good afternoon,"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llThirdWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@android:drawable/editbox_dropdown_light_frame"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:id="@+id/llUpperBar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/llJapLanguage2"
+                        android:layout_width="280dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvApiJapWord2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="今日は"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="32dp" />
+
+                        <TextView
+                            android:id="@+id/tvApiJapReading2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="こんにち"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="22dp"
+                            android:textStyle="italic" />
+
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/buFavourite2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:background="#00ffffff"
+                        android:src="@android:drawable/btn_star" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvApiJapRomaji2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="konnichiha"
+                    android:textColor="#000000"
+                    android:textSize="20dp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tvApiEngDefinition2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="hello, good day, good afternoon,"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
