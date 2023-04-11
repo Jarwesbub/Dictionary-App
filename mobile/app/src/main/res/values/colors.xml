@@ -15,5 +15,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_gold">#FFDDA0</color>
     <color name="dark_gold">#9F7939</color>
-
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_400">#BDBDBD</color>
 </resources>
