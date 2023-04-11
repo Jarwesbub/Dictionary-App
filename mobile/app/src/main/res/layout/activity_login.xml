@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Login"
+        android:background="@drawable/button_background"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
@@ -49,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Create user"
+        android:background="@drawable/button_background"
         app:layout_constraintEnd_toEndOf="@+id/btnLogin"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="@+id/btnLogin"

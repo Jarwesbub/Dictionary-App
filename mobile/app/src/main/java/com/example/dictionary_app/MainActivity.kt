@@ -45,4 +45,28 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handles presses on the action bar items
+        return when (item.itemId) {
+            R.id.tbSettings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.tbLicences -> {
+                val intent = Intent(this, LicencesActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.tbAbout -> {
+                val intent = Intent(this, AboutUsActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    fun openFavouriteWords(view: View?) {
+    }
 }

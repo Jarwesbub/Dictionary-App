@@ -29,12 +29,13 @@
 
         <Button
             android:id="@+id/buApiTest"
-            android:layout_width="0dp"
+            android:layout_width="10dp"
             android:layout_height="50dp"
             android:layout_marginBottom="64dp"
             android:layout_weight=".10"
             android:onClick="onClickGetFromApi"
             android:text=">"
+            android:background="@drawable/button_background"
             android:textAlignment="center" />
 
     </LinearLayout>
