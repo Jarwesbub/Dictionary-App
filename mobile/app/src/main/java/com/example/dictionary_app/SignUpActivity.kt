@@ -1,9 +1,8 @@
 package com.example.dictionary_app
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.dictionary_app.databinding.ActivityLoginBinding
+import com.example.dictionary_app.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -11,63 +10,38 @@ import kotlinx.coroutines.withContext
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
-import com.google.gson.Gson
 
-class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityLoginBinding;
+class SignUpActivity : AppCompatActivity() {
+
+    private lateinit var binding : ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        binding.btnLogin.setOnClickListener {onLoginClick()}
-
-        binding.btnCreateUser.setOnClickListener { onCreateUserClick() }
+        binding.btnSignUp.setOnClickListener { onSignUpClick() }
     }
 
-    private fun onCreateUserClick(){
-        val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun onLoginClick(){
-
-        val username = binding.etUsername.text.toString()
-        val password = binding.etPassword.text.toString()
-        println(username)
-        println(password)
+    private fun onSignUpClick() {
+        val username = binding.etSignUpUsername.text.toString()
+        val password = binding.etSignUpPassword.text.toString()
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val result = loginRequest(username, password)
-                // Handle the successful response here
+                val result = signUpRequest(username,password)
                 println(result)
-            } catch (e: Exception) {
-                // Handle the error here
-                println(e.message)
-
+            }
+            catch (e: Exception){
+            println(e.message)
             }
         }
-
     }
-
-    private fun parseTokens(tokens: String){
-        // Parse JSON string using Gson into an instance of Token class
-        val tokenData = Gson().fromJson(tokens, TokenData::class.java)
-        val accessToken = tokenData.accessToken
-        val refreshToken = tokenData.refreshToken
-        println(accessToken)
-        println(refreshToken)
-        prefs.writeTokens(accessToken,refreshToken)
-
-    }
-
-    private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
+    private suspend fun signUpRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://{server ip here}:3000/login")
+        val url = URL("http://{server ip here}:3000/signup")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
@@ -94,8 +68,6 @@ class LoginActivity : AppCompatActivity() {
             // Request successful - read the response data into a string and print it to the console
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
-            // Send JSON string to parseTokens function
-            parseTokens(response)
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")

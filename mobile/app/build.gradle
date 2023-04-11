@@ -38,6 +38,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'dev.esnault.wanakana:wanakana-android:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'androidx.core:core-ktx:1.7.0'
