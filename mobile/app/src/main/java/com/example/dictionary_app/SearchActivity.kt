@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -25,7 +27,6 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.tvApiStatus.text = ""
         resetAll()
 
         val firstFav = binding.buFavourite0
@@ -96,7 +97,10 @@ class SearchActivity : AppCompatActivity() {
                 inputSystem.close()
             }
             else {
-                binding.tvApiStatus.text = "Status: Connection Failed"
+                Toast.makeText(
+                    applicationContext,
+                    "Connection failed", Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -105,7 +109,6 @@ class SearchActivity : AppCompatActivity() {
         runOnUiThread {
             kotlin.run {
                 if (request.data.isNotEmpty()) {
-                    binding.tvApiStatus.text = "Status: OK"
                     resetAll()
 
                     var index = 2
@@ -120,7 +123,10 @@ class SearchActivity : AppCompatActivity() {
                     }
                 }
                 else {
-                    binding.tvApiStatus.text = "Status: Word not found"
+                    Toast.makeText(
+                        applicationContext,
+                        "Word not found", Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -191,6 +197,10 @@ class SearchActivity : AppCompatActivity() {
                         android.R.drawable.btn_star_big_on
                     )
                 )
+                Toast.makeText(
+                    applicationContext,
+                    "Added to the favourites", Toast.LENGTH_SHORT
+                ).show()
                 favButton.tag="on"
             } else {                            // Remove from favourites list
                 favButton.setImageDrawable(
@@ -199,6 +209,10 @@ class SearchActivity : AppCompatActivity() {
                         android.R.drawable.btn_star_big_off
                     )
                 )
+                Toast.makeText(
+                    applicationContext,
+                    "Removed from the favourites", Toast.LENGTH_SHORT
+                ).show()
                 favButton.tag="off"
             }
         }

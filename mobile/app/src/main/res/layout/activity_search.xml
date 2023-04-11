@@ -8,21 +8,11 @@
     android:background="@android:drawable/editbox_dropdown_light_frame"
     tools:context=".SearchActivity">
 
-    <TextView
-        android:id="@+id/tvApiStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status:"
-        app:layout_constraintBottom_toTopOf="@+id/liLayoutSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
         android:id="@+id/liLayoutSearch"
         android:layout_width="340dp"
         android:layout_height="74dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

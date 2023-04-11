@@ -16,8 +16,9 @@ import com.example.dictionary_app.databinding.ActivityWordListBinding
 class WordListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWordListBinding
     var gridView: GridView? = null
+    // Testing
     private val wordsList = arrayOf(
-        "Arigato", "Konnichiwa", "Samurai", "Ninja", "Mizu", "Kaze", "Aoi"
+        "Hello", "Thanks", "Goodbye", "House", "Sun", "Moon"
 
     )
 
