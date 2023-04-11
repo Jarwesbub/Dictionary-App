@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/swDarkMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
+        android:text="Dark Mode: Disabled"
+        android:textSize="20dp"
+        app:layout_constraintWidth_percent="0.9"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:text="Settings\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed mattis, neque ac dapibus gravida, ipsum lorem molestie dui, at scelerisque lectus risus aliquet nisl. Aenean at varius sapien. Duis at mauris sed tortor cursus aliquam. In venenatis bibendum enim, non placerat nibh vehicula non. Etiam vitae congue metus. Curabitur id molestie ipsum, quis efficitur lorem. Pellentesque eros magna, faucibus maximus leo ut, rhoncus finibus turpis. Nullam facilisis placerat urna, sed feugiat metus porttitor sit amet. Sed imperdiet fringilla justo sed semper. Morbi fermentum auctor tortor sit amet lobortis. " />
+        app:layout_constraintVertical_bias="0.01"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="227dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.dictionary_app.databinding.ActivityMainBinding
 
 
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, FlashCardActivity::class.java)
             startActivity(intent)
         }
+
     }
 
     fun onClickGoToSearch(view: View) { //Test button
