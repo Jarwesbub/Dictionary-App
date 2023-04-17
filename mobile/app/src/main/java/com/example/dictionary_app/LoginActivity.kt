@@ -3,6 +3,7 @@ package com.example.dictionary_app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.dictionary_app.databinding.ActivityLoginBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -96,12 +97,22 @@ class LoginActivity : AppCompatActivity() {
             println(response)
             // Send JSON string to parseTokens function
             parseTokens(response)
+            withContext(Dispatchers.Main) {
+                showToastMessage("LOGIN SUCCESS")
+            }
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
+            withContext(Dispatchers.Main) {
+                showToastMessage("THERE WAS AN ERROR: $responseCode")
+            }
         }
 
         // Disconnect the connection to free up system resources
         conn.disconnect()
+    }
+
+    private fun showToastMessage(message: String) {
+        Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
     }
 }
