@@ -1,5 +1,6 @@
 package com.example.dictionary_app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -71,6 +72,7 @@ class SignUpActivity : AppCompatActivity() {
             println(response)
             withContext(Dispatchers.Main) {
                 showToastMessage("ACCOUNT CREATED!")
+                moveToLogin()
             }
 
         } else {
@@ -88,5 +90,9 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun showToastMessage(message: String) {
         Toast.makeText(this@SignUpActivity, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun moveToLogin(){
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
     }
 }
