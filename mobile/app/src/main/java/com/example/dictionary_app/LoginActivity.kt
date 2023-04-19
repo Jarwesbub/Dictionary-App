@@ -29,6 +29,11 @@ class LoginActivity : AppCompatActivity() {
         binding.btnCreateUser.setOnClickListener { onCreateUserClick() }
     }
 
+    private fun moveToMain(){
+        val intent = Intent(this,MainActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun onCreateUserClick(){
         val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
@@ -68,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
 
     private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://{server ip here}:3000/login")
+        val url = URL("http://192.168.178.29:3000/login")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
@@ -99,6 +104,7 @@ class LoginActivity : AppCompatActivity() {
             parseTokens(response)
             withContext(Dispatchers.Main) {
                 showToastMessage("LOGIN SUCCESS")
+                moveToMain()
             }
         } else {
             // Request unsuccessful - print an error message with the response code
