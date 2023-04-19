@@ -43,8 +43,6 @@ class LoginActivity : AppCompatActivity() {
 
         val username = binding.etUsername.text.toString()
         val password = binding.etPassword.text.toString()
-        println(username)
-        println(password)
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
@@ -60,14 +58,23 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun parseTokens(tokens: String){
-        // Parse JSON string using Gson into an instance of Token class
-        val tokenData = Gson().fromJson(tokens, TokenData::class.java)
+    private fun parseResponse(response: String){
+        // Parse JSON string using Gson into an instance of TokenData class
+        val tokenData = Gson().fromJson(response, TokenData::class.java)
         val accessToken = tokenData.accessToken
         val refreshToken = tokenData.refreshToken
+        // Save Tokens to sharedprefs
+        prefs.writeTokens(accessToken,refreshToken)
         println(accessToken)
         println(refreshToken)
-        prefs.writeTokens(accessToken,refreshToken)
+
+        // Parse JSON string using Gson into an instance of UserData class
+        val userData = Gson().fromJson(response, UserData::class.java)
+        val user_id = userData.user_id
+        val username = userData.user_name
+        // Save userdata to sharedprefs
+        prefs.saveUserData(user_id,username)
+
 
     }
 
@@ -101,7 +108,7 @@ class LoginActivity : AppCompatActivity() {
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
             // Send JSON string to parseTokens function
-            parseTokens(response)
+            parseResponse(response)
             withContext(Dispatchers.Main) {
                 showToastMessage("LOGIN SUCCESS")
                 moveToMain()
