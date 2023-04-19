@@ -18,8 +18,8 @@ generaRefreshToken = async (userId, username) => {
 
     // Check if there is an existing refresh token for the user in the database
     const existingToken = await authModel.getRefreshToken(userId);
-
-    if (existingToken) {
+ 
+    if (existingToken!==null) {
       // If there is an existing token, update the row with the new token and expiration date
       await authModel.updateRefreshToken(userId, refreshToken);
     } else {
