@@ -13,13 +13,11 @@ class InternalStorage (val context: Context) {
             var fileList = ArrayList<String>()
             context.openFileInput(fileName).use { stream ->
                 stream.bufferedReader().use {
-                    //println("BUFFERING")
                     var cache = ""
                     for (text in it.readText()) {
                         val line = text.toString()
                         if (line.contains(";")) {
                             val group = cache + line.substringBefore(";")
-
                             fileList.add(group)
                             cache = ""
                         } else {
@@ -28,7 +26,7 @@ class InternalStorage (val context: Context) {
                     }
                 }
             }
-                //println("COUNT: ${fileList.count()}")
+
                 for(s in fileList){
                     println(s)
                 }
@@ -41,7 +39,7 @@ class InternalStorage (val context: Context) {
                     }
                 }
 
-        }catch(e: FileNotFoundException) {
+        } catch(e: FileNotFoundException) { // Creates new text file for data
             context.openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
                 output.write("".toByteArray())
                 output.close()
@@ -57,9 +55,13 @@ class InternalStorage (val context: Context) {
         val newWord: String = "${englishDefinition}:${japWord}:${japReading}:${japRomaji};"
         fileBody[englishDefinition] = array
 
-        context.openFileOutput(fileName, Context.MODE_APPEND).use { output ->
-            output.write(newWord.toByteArray())
-            output.close()
+        try {
+            context.openFileOutput(fileName, Context.MODE_APPEND).use { output ->
+                output.write(newWord.toByteArray())
+                output.close()
+            }
+        } catch(e: Exception) {
+            e.printStackTrace()
         }
 
     }
@@ -68,13 +70,17 @@ class InternalStorage (val context: Context) {
         fileBody.remove(englishDefinition)
         clearAllDataFromInternalStorage()
 
-        context.openFileOutput(fileName, Context.MODE_APPEND).use { output ->
-            for (map in fileBody) {
-                val word = "${map.key}:${map.value[0]}:${map.value[1]}:${map.value[2]};"
-                output.write(word.toByteArray())
-                println(word)
+        try {
+            context.openFileOutput(fileName, Context.MODE_APPEND).use { output ->
+                for (map in fileBody) {
+                    val word = "${map.key}:${map.value[0]}:${map.value[1]}:${map.value[2]};"
+                    output.write(word.toByteArray())
+                    println(word)
+                }
+                output.close()
             }
-            output.close()
+        } catch(e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -83,14 +89,19 @@ class InternalStorage (val context: Context) {
     }
 
     fun clearAllDataFromInternalStorage() {
-        context.openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
-            output.write("".toByteArray())
-            output.close()
+        try {
+            context.openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
+                output.write("".toByteArray())
+                output.close()
+            }
+        } catch(e: Exception) {
+            e.printStackTrace()
         }
+
     }
 
-    fun checkIfDataIsOnTheList(value :String) :Boolean {
-        if(fileBody.containsKey(value)){
+    fun checkIfKeyIsOnTheMap(key :String) :Boolean {
+        if(fileBody.containsKey(key)) {
             return true
         }
         return false

@@ -199,16 +199,15 @@ class SearchActivity : AppCompatActivity() {
             binding.llThirdWord.isVisible = true
             favButton = binding.buFavourite2
         }
-        val isFavButtonActive = internalStorage.checkIfDataIsOnTheList(englishDefinition)
+        val isFavButtonActive = internalStorage.checkIfKeyIsOnTheMap(englishDefinition)
         setFavouriteButton(favButton, isFavButtonActive)
     }
 
     private fun checkIfNullValue(value: String):String {
-        if(value===null){
-            println("NULL VALUE")
-            return " "
+        return if(value===null){
+            " "
         } else{
-            return value
+            value
         }
     }
 
