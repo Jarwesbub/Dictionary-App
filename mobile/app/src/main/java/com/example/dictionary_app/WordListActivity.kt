@@ -77,7 +77,7 @@ class WordListActivity : AppCompatActivity() {
             internalStorage.removeFromInternalStorage(currentWord.toString())
             val index = englishWords.indexOf(currentWord)
             englishWords.remove(currentWord)
-            println("REMOVING FROM INDEX: $index")
+
             updateGridViewItems()
             wordsMap.remove(currentWord)
             showToastText("Word removed")

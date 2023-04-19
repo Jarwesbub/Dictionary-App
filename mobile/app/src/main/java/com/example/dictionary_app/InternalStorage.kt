@@ -13,7 +13,7 @@ class InternalStorage (val context: Context) {
             var fileList = ArrayList<String>()
             context.openFileInput(fileName).use { stream ->
                 stream.bufferedReader().use {
-                    println("BUFFERING")
+                    //println("BUFFERING")
                     var cache = ""
                     for (text in it.readText()) {
                         val line = text.toString()
@@ -28,7 +28,7 @@ class InternalStorage (val context: Context) {
                     }
                 }
             }
-                println("COUNT: ${fileList.count()}")
+                //println("COUNT: ${fileList.count()}")
                 for(s in fileList){
                     println(s)
                 }
@@ -45,7 +45,6 @@ class InternalStorage (val context: Context) {
             context.openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
                 output.write("".toByteArray())
                 output.close()
-                println("New File created!")
             }
         }catch(e: Exception){
             e.printStackTrace()
@@ -57,7 +56,6 @@ class InternalStorage (val context: Context) {
         val array = arrayOf(japWord,japReading,japRomaji)
         val newWord: String = "${englishDefinition}:${japWord}:${japReading}:${japRomaji};"
         fileBody[englishDefinition] = array
-        println("ADDING NEW DATA: $englishDefinition")
 
         context.openFileOutput(fileName, Context.MODE_APPEND).use { output ->
             output.write(newWord.toByteArray())
@@ -67,7 +65,6 @@ class InternalStorage (val context: Context) {
     }
 
     fun removeFromInternalStorage(englishDefinition: String) {
-        println("REMOVING DATA: $englishDefinition")
         fileBody.remove(englishDefinition)
         clearAllDataFromInternalStorage()
 
@@ -92,15 +89,11 @@ class InternalStorage (val context: Context) {
         }
     }
 
-    fun readFromInternalStorage(englishWord: String): Array<String> {
-        if(fileBody.contains(englishWord)) {
-            val japWord: String = fileBody.getValue(englishWord).elementAt(0)
-            val japReading: String = fileBody.getValue(englishWord).elementAt(1)
-            val japRomaji: String = fileBody.getValue(englishWord).elementAt(2)
-
-            return arrayOf(englishWord,japWord,japReading,japRomaji)
+    fun checkIfDataIsOnTheList(value :String) :Boolean {
+        if(fileBody.containsKey(value)){
+            return true
         }
-        return emptyArray()
+        return false
     }
 
 }

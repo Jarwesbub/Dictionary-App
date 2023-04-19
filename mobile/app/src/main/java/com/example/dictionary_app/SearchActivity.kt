@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -40,19 +39,19 @@ class SearchActivity : AppCompatActivity() {
         val firstFav = binding.buFavourite0
         firstFav.tag = "off"
         firstFav.setOnClickListener {
-            addWordToFavourite(0, firstFav)
+            buttonAddWordToFavourite(0, firstFav)
         }
 
         val secondFav = binding.buFavourite1
         secondFav.tag = "off"
         secondFav.setOnClickListener {
-            addWordToFavourite(1, secondFav)
+            buttonAddWordToFavourite(1, secondFav)
         }
 
         val thirdFav = binding.buFavourite2
         thirdFav.tag = "off"
         thirdFav.setOnClickListener {
-            addWordToFavourite(2, thirdFav)
+            buttonAddWordToFavourite(2, thirdFav)
         }
 
     }
@@ -74,10 +73,6 @@ class SearchActivity : AppCompatActivity() {
         binding.llFirstWord.isVisible = false
         binding.llSecondWord.isVisible = false
         binding.llThirdWord.isVisible = false
-
-        resetFavouriteButton(binding.buFavourite0)
-        resetFavouriteButton(binding.buFavourite1)
-        resetFavouriteButton(binding.buFavourite2)
 
     }
 
@@ -145,6 +140,7 @@ class SearchActivity : AppCompatActivity() {
         val maxReadingWidth = 6
         var word = japWord
         var reading = japReading
+        var favButton: ImageButton
 
         if(japWord != null && japWord.length>maxWordWidth) {
             word = ""
@@ -175,6 +171,7 @@ class SearchActivity : AppCompatActivity() {
             binding.tvApiJapRomaji0.text = romaji
             binding.tvApiEngDefinition0.text = englishDefinition
             binding.llFirstWord.isVisible = true
+            favButton = binding.buFavourite0
 
         } else if(index===1) {
             secondWord = listOf(englishDefinition,
@@ -187,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
             binding.tvApiJapRomaji1.text = romaji
             binding.tvApiEngDefinition1.text = englishDefinition
             binding.llSecondWord.isVisible = true
+            favButton = binding.buFavourite1
         }
         else {
             thirdWord = listOf(englishDefinition,
@@ -199,7 +197,10 @@ class SearchActivity : AppCompatActivity() {
             binding.tvApiJapRomaji2.text = romaji
             binding.tvApiEngDefinition2.text = englishDefinition
             binding.llThirdWord.isVisible = true
+            favButton = binding.buFavourite2
         }
+        val isFavButtonActive = internalStorage.checkIfDataIsOnTheList(englishDefinition)
+        setFavouriteButton(favButton, isFavButtonActive)
     }
 
     private fun checkIfNullValue(value: String):String {
@@ -211,46 +212,43 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun resetFavouriteButton(favButton: ImageButton) {
-        favButton.tag = "off"
-        favButton.setImageDrawable(
-            ContextCompat.getDrawable(
-                applicationContext,
-                android.R.drawable.btn_star_big_off
+    private fun setFavouriteButton(favButton: ImageButton, setOn: Boolean) {
+        if(setOn) {
+            favButton.tag = "on"
+            favButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    android.R.drawable.btn_star_big_on
+                )
             )
-        )
+        }
+        else {
+            favButton.tag = "off"
+            favButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    android.R.drawable.btn_star_big_off
+                )
+            )
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun addWordToFavourite(index: Int, favButton: ImageButton) {
+    private fun buttonAddWordToFavourite(index: Int, favButton: ImageButton) {
             if (favButton.tag==="off") {         // Add to favorites list
                 saveToStorage(index)
-
-                favButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        android.R.drawable.btn_star_big_on
-                    )
-                )
+                setFavouriteButton(favButton, true)
                 Toast.makeText(
                     applicationContext,
                     "Added to the favourites", Toast.LENGTH_SHORT
                 ).show()
-                favButton.tag="on"
             } else {                            // Remove from favourites list
                 removeFromStorage(index)
-
-                favButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        android.R.drawable.btn_star_big_off
-                    )
-                )
+                setFavouriteButton(favButton, false)
                 Toast.makeText(
                     applicationContext,
                     "Removed from the favourites", Toast.LENGTH_SHORT
                 ).show()
-                favButton.tag="off"
             }
         }
 
@@ -274,15 +272,4 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun loadFromStorage(index: Int): Array<String> {
-        if(index===0){
-            return internalStorage.readFromInternalStorage(firstWord[0])
-        } else if (index===1){
-            return internalStorage.readFromInternalStorage(secondWord[0])
-        } else {
-            return internalStorage.readFromInternalStorage(thirdWord[0])
-        }
-    }
-
-    }
+}
