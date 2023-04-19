@@ -26,4 +26,10 @@ class Prefs (context: Context){
         return preferences.getString("refreshToken","noToken")
     }
 
+    // Clear shared preferences for logging out user
+    fun clearSharedPreference() {
+        val editor: SharedPreferences.Editor = preferences.edit()
+        editor.clear()
+        editor.commit()
+    }
 }

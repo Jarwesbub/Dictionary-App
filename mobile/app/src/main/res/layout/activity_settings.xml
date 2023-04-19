@@ -19,4 +19,22 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="227dp" />
 
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="163dp"
+        android:layout_height="48dp"
+        android:text="logout"
+        app:layout_constraintTop_toBottomOf="@id/swDarkMode"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="102dp" />
+
+    <Button
+        android:id="@+id/btnDeleteUser"
+        android:layout_width="158dp"
+        android:layout_height="48dp"
+        android:text="delete user"
+        app:layout_constraintTop_toBottomOf="@id/btnLogout"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="169dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
