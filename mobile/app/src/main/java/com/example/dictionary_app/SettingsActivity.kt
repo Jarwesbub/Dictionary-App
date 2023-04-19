@@ -40,9 +40,10 @@ class SettingsActivity : AppCompatActivity() {
 
         btnLogout.setOnClickListener{
             val username = prefs.getUserName().toString()
+            val refreshToken = prefs.getRefreshToken().toString()
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val result = logoutRequest(username)
+                    val result = logoutRequest(username,refreshToken)
                     // Handle the successful response here
                     println(result)
                 } catch (e: Exception) {
@@ -89,7 +90,7 @@ class SettingsActivity : AppCompatActivity() {
         finish()
     }
 
-    private suspend fun logoutRequest(username: String) = withContext(Dispatchers.IO){
+    private suspend fun logoutRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://10.0.2.2:3000/logout")
 
@@ -105,7 +106,7 @@ class SettingsActivity : AppCompatActivity() {
         conn.setRequestProperty("Content-Type", "application/json")
 
         // Create a JSON payload with the username
-        val body = "{ \"username\": \"$username\"}"
+        val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
 
         // Write the payload to the output stream of the connection
         val output = OutputStreamWriter(conn.outputStream)
