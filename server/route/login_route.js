@@ -18,7 +18,12 @@ router.post("/", async (req, res) => {
       const refreshToken = await auth.generaRefreshToken(userId, username);
       res
         .status(200)
-        .json({ accessToken: accessToken, refreshToken: refreshToken });
+        .json({
+          user_id: userId,
+          user_name: username,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        });
     } else {
       res.status(401).send("Not allowed");
     }
