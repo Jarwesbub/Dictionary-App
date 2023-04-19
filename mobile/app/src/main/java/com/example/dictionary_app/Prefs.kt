@@ -28,8 +28,20 @@ class Prefs (context: Context){
 
     // Clear shared preferences for logging out user
     fun clearSharedPreference() {
-        val editor: SharedPreferences.Editor = preferences.edit()
         editor.clear()
         editor.commit()
+    }
+
+    fun writeUserName(userName: String){
+        editor.putString("userName",userName)
+        editor.commit()
+        println("saved username")
+    }
+    fun getUserName(): String?{
+        return preferences.getString("userName", "noUser")
+    }
+    fun printTokens(){
+        println(preferences.getString("accessToken","noToken"))
+        println(preferences.getString("refreshToken","noToken"))
     }
 }

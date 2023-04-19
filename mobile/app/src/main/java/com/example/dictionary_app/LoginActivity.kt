@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString()
         println(username)
         println(password)
-
+        prefs.writeUserName(username)
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = loginRequest(username, password)

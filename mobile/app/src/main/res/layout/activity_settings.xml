@@ -21,20 +21,61 @@
 
     <Button
         android:id="@+id/btnLogout"
-        android:layout_width="163dp"
-        android:layout_height="48dp"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
         android:text="logout"
+        android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/swDarkMode"
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="102dp" />
 
     <Button
         android:id="@+id/btnDeleteUser"
-        android:layout_width="158dp"
-        android:layout_height="48dp"
-        android:text="delete user"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:text="tokens for now"
+        android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/btnLogout"
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="169dp" />
+
+    <TextView
+        android:id="@+id/usrView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintVertical_bias="0"
+        android:text="user"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="188dp"
+        app:layout_constraintTop_toBottomOf="@id/btnDeleteUser"
+        app:layout_constraintBottom_toTopOf="@id/accView" />
+
+    <TextView
+        android:id="@+id/accView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintVertical_bias="0"
+        android:text="accesstoken"
+        app:layout_constraintTop_toBottomOf="@id/usrView"
+        app:layout_constraintBottom_toTopOf="@id/refView" />
+
+    <TextView
+        android:id="@+id/refView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:layout_constraintWidth_percent="0.9"
+        app:layout_constraintVertical_bias="0"
+        android:text="refreshtoken"
+        app:layout_constraintTop_toBottomOf="@id/accView"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
