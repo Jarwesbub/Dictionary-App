@@ -53,10 +53,17 @@ verifyAccessToken = (req, res, next) => {
     next();
   });
 };
-verifyRefreshToken = (token) => {
+verifyRefreshToken = async (token) => {
   try {
     const decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-    return decoded;
+    const userId = decoded.userId;
+
+    const dbToken = await authModel.getRefreshToken(userId)
+
+    console.log(dbToken)
+    console.log(typeof(token))
+    if(token===dbToken[0].refresh_token) return decoded;
+    else throw new Error("Invalid refresh token");
   } catch (error) {
     console.error(error);
     throw new Error("Invalid refresh token");
