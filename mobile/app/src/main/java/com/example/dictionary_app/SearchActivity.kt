@@ -1,11 +1,12 @@
 package com.example.dictionary_app
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -20,31 +21,37 @@ import javax.net.ssl.HttpsURLConnection
 var inputWord: (String?) = null
 
 class SearchActivity : AppCompatActivity() {
+    private val internalStorage: InternalStorage = InternalStorage(this)
     private lateinit var binding: ActivitySearchBinding
+    private lateinit var firstWord: List<String>
+    private lateinit var secondWord: List<String>
+    private lateinit var thirdWord: List<String>
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         resetAll()
+        internalStorage.setInternalStorage()
 
         val firstFav = binding.buFavourite0
         firstFav.tag = "off"
         firstFav.setOnClickListener {
-            addWordToFavourite(firstFav)
+            buttonAddWordToFavourite(0, firstFav)
         }
 
         val secondFav = binding.buFavourite1
         secondFav.tag = "off"
         secondFav.setOnClickListener {
-            addWordToFavourite(secondFav)
+            buttonAddWordToFavourite(1, secondFav)
         }
 
         val thirdFav = binding.buFavourite2
         thirdFav.tag = "off"
         thirdFav.setOnClickListener {
-            addWordToFavourite(thirdFav)
+            buttonAddWordToFavourite(2, thirdFav)
         }
 
     }
@@ -66,10 +73,6 @@ class SearchActivity : AppCompatActivity() {
         binding.llFirstWord.isVisible = false
         binding.llSecondWord.isVisible = false
         binding.llThirdWord.isVisible = false
-
-        resetFavouriteButton(binding.buFavourite0)
-        resetFavouriteButton(binding.buFavourite1)
-        resetFavouriteButton(binding.buFavourite2)
 
     }
 
@@ -132,11 +135,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun createLayout(index: Int?, japWord: String?, japReading: String?, englishDefinition: String?) {
+    private fun createLayout(index: Int, japWord: String, japReading: String, englishDefinition: String) {
         val maxWordWidth = 4
         val maxReadingWidth = 6
         var word = japWord
         var reading = japReading
+        var favButton: ImageButton
 
         if(japWord != null && japWord.length>maxWordWidth) {
             word = ""
@@ -154,67 +158,117 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+        var romaji = Wanakana.toRomaji(reading)
+
         if(index===0) {
+            firstWord = listOf(englishDefinition,
+                checkIfNullValue(japWord),
+                checkIfNullValue(japReading),
+                checkIfNullValue(romaji))
+
             binding.tvApiJapWord0.text = word
             binding.tvApiJapReading0.text = reading
-            binding.tvApiJapRomaji0.text = Wanakana.toRomaji(reading.toString())
+            binding.tvApiJapRomaji0.text = romaji
             binding.tvApiEngDefinition0.text = englishDefinition
             binding.llFirstWord.isVisible = true
+            favButton = binding.buFavourite0
 
         } else if(index===1) {
+            secondWord = listOf(englishDefinition,
+                checkIfNullValue(japWord),
+                checkIfNullValue(japReading),
+                checkIfNullValue(romaji))
+
             binding.tvApiJapWord1.text = word
             binding.tvApiJapReading1.text = reading
-            binding.tvApiJapRomaji1.text = Wanakana.toRomaji(japReading.toString())
+            binding.tvApiJapRomaji1.text = romaji
             binding.tvApiEngDefinition1.text = englishDefinition
             binding.llSecondWord.isVisible = true
+            favButton = binding.buFavourite1
         }
         else {
+            thirdWord = listOf(englishDefinition,
+                checkIfNullValue(japWord),
+                checkIfNullValue(japReading),
+                checkIfNullValue(romaji))
+
             binding.tvApiJapWord2.text = word
             binding.tvApiJapReading2.text = reading
-            binding.tvApiJapRomaji2.text = Wanakana.toRomaji(japReading.toString())
+            binding.tvApiJapRomaji2.text = romaji
             binding.tvApiEngDefinition2.text = englishDefinition
             binding.llThirdWord.isVisible = true
+            favButton = binding.buFavourite2
+        }
+        val isFavButtonActive = internalStorage.checkIfKeyIsOnTheMap(englishDefinition)
+        setFavouriteButton(favButton, isFavButtonActive)
+    }
+
+    private fun checkIfNullValue(value: String):String {
+        return if(value===null){
+            " "
+        } else{
+            value
         }
     }
 
-
-    private fun resetFavouriteButton(favButton: ImageButton) {
-        favButton.tag = "off"
-        favButton.setImageDrawable(
-            ContextCompat.getDrawable(
-                applicationContext,
-                android.R.drawable.btn_star_big_off
+    private fun setFavouriteButton(favButton: ImageButton, setOn: Boolean) {
+        if(setOn) {
+            favButton.tag = "on"
+            favButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    android.R.drawable.btn_star_big_on
+                )
             )
-        )
+        }
+        else {
+            favButton.tag = "off"
+            favButton.setImageDrawable(
+                ContextCompat.getDrawable(
+                    applicationContext,
+                    android.R.drawable.btn_star_big_off
+                )
+            )
+        }
     }
 
-    private fun addWordToFavourite(favButton: ImageButton) {
-
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun buttonAddWordToFavourite(index: Int, favButton: ImageButton) {
             if (favButton.tag==="off") {         // Add to favorites list
-                favButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        android.R.drawable.btn_star_big_on
-                    )
-                )
+                saveToStorage(index)
+                setFavouriteButton(favButton, true)
                 Toast.makeText(
                     applicationContext,
                     "Added to the favourites", Toast.LENGTH_SHORT
                 ).show()
-                favButton.tag="on"
             } else {                            // Remove from favourites list
-                favButton.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        applicationContext,
-                        android.R.drawable.btn_star_big_off
-                    )
-                )
+                removeFromStorage(index)
+                setFavouriteButton(favButton, false)
                 Toast.makeText(
                     applicationContext,
                     "Removed from the favourites", Toast.LENGTH_SHORT
                 ).show()
-                favButton.tag="off"
             }
         }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun saveToStorage(index: Int){
+        if(index===0) {
+            internalStorage.writeToInternalStorage(firstWord[0],firstWord[1],firstWord[2],firstWord[3])
+        } else if (index===1) {
+            internalStorage.writeToInternalStorage(secondWord[0],secondWord[1],secondWord[2],secondWord[3])
+        } else {
+            internalStorage.writeToInternalStorage(thirdWord[0],thirdWord[1],thirdWord[2],thirdWord[3])
+        }
     }
+    private fun removeFromStorage(index: Int) {
+        if(index===0) {
+            internalStorage.removeFromInternalStorage(firstWord[0])
+        } else if (index===1) {
+            internalStorage.removeFromInternalStorage(secondWord[0])
+        } else {
+            internalStorage.removeFromInternalStorage(thirdWord[0])
+        }
+    }
+
+}

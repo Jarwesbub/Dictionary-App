@@ -4,32 +4,115 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animationCache="false"
     tools:context=".WordListActivity">
 
-    <ScrollView
-        android:layout_width="328dp"
-        android:layout_height="555dp"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="350dp"
+        android:layout_height="670dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tilDropdownMenu">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_marginTop="24dp"
+            android:background="@android:drawable/editbox_dropdown_light_frame"
+            android:orientation="vertical"
+            android:paddingTop="6dp">
 
-            <GridView
-                android:id="@+id/gridview1"
+            <TextView
+                android:id="@+id/tvShowcaseJapReading"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:columnWidth="50dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="こんにち"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tvShowcaseJapWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="今日は"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="38dp" />
+
+            <TextView
+                android:id="@+id/tvShowcaseJapRomaji"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:numColumns="1"
-                android:stretchMode="columnWidth" />
+                android:padding="6dp"
+                android:text="konnichiha"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tvShowcaseEngDefinition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="hello, good day, good afternoon,"
+                android:textAlignment="center"
+                android:textColor="#000000"
+                android:textSize="18sp" />
+
         </LinearLayout>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/button_background">
 
-    </ScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="6dp">
+
+                <GridView
+                    android:id="@+id/gvEnglishWordsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="360dp"
+                    android:columnWidth="50dp"
+                    android:gravity="center"
+                    android:numColumns="1"
+                    android:scrollbarSize="18dp"
+                    android:stretchMode="columnWidth"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilDropdownMenu"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="186dp"
+        android:layout_height="39dp"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:text=" " />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
