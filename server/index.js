@@ -2,8 +2,12 @@ const express = require("express");
 const loginRoute = require("./route/login_route");
 const signupRoute = require("./route/signup_route");
 const userRoute = require("./route/user_route");
+<<<<<<< HEAD
 const logoutRoute = require("./route/logout_route");
 const deleteuserRoute = require("./route/deleteuser_route");
+=======
+const flashcardRoute = require("./route/flashcard_route");
+>>>>>>> dcaec65 (Changed game progression)
 
 const port = 3000;
 
@@ -20,8 +24,12 @@ app.get("/", (req, res) => {
 app.use("/signup", signupRoute);
 app.use("/login", loginRoute);
 app.use("/user", userRoute);
+<<<<<<< HEAD
 app.use("/logout", logoutRoute);
 app.use("/deleteuser", deleteuserRoute);
+=======
+app.use("/flashcard", flashcardRoute);
+>>>>>>> dcaec65 (Changed game progression)
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);

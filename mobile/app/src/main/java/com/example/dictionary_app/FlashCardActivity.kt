@@ -1,19 +1,18 @@
 package com.example.dictionary_app
 
-import android.R
 import android.content.Context
+import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dictionary_app.databinding.ActivityFlashCardBinding
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dev.esnault.wanakana.core.Wanakana
-import android.view.View
 import kotlinx.coroutines.*
-import java.net.HttpURLConnection
 import java.net.URL
+
 
 data class Question(val kanji: String, val meaning: String, val reading: String)
 
