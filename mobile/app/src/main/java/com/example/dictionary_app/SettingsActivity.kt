@@ -56,7 +56,6 @@ class SettingsActivity : AppCompatActivity() {
             prefs.clearSharedPreference()
             updateTextViews()
             Toast.makeText(this,"LogOut.",Toast.LENGTH_SHORT).show()
-
             returnToLogin()
         }
 
@@ -64,8 +63,22 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this,"Delete user",Toast.LENGTH_SHORT).show()
             prefs.printTokens()
             updateTextViews()
+            val username = prefs.getUserName().toString()
+            val refreshToken = prefs.getRefreshToken().toString()
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val result = deleteUserRequest(username,refreshToken)
+                    // Handle the successful response here
+                    println(result)
+                } catch (e: Exception) {
+                    // Handle the error here
+                    println(e.message)
 
-            //returnToLogin()
+                }
+            }
+            prefs.clearSharedPreference()
+            updateTextViews()
+            returnToLogin()
         }
 
         //check if dark mode is enabled and set switch to true if it is
@@ -119,9 +132,53 @@ class SettingsActivity : AppCompatActivity() {
             // Request successful - read the response data into a string and print it to the console
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
-            // Send JSON string to parseTokens function
+
             withContext(Dispatchers.Main) {
                 showToastMessage("Logout Success")
+            }
+        } else {
+            // Request unsuccessful - print an error message with the response code
+            println("Error: $responseCode")
+            withContext(Dispatchers.Main) {
+                showToastMessage("Error: $responseCode")
+            }
+        }
+
+        // Disconnect the connection to free up system resources
+        conn.disconnect()
+    }
+    private suspend fun deleteUserRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
+        // Create a URL object with the URL we want to connect to
+        val url = URL("http://10.0.2.2:3000/deleteuser")
+
+        // Open an HTTP connection to the URL
+        val conn = url.openConnection() as HttpURLConnection
+
+        // Set the request method to DELETE, and enable output and input for the connection
+        conn.requestMethod = "DELETE"
+        conn.doOutput = true
+        conn.doInput = true
+
+        // Set the Content-Type header to indicate that we're sending a JSON payload
+        conn.setRequestProperty("Content-Type", "application/json")
+
+        // Create a JSON payload with the username
+        val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
+
+        // Write the payload to the output stream of the connection
+        val output = OutputStreamWriter(conn.outputStream)
+        output.write(body)
+        output.flush()
+
+        // Check the response code to see if the request was successful
+        val responseCode = conn.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Request successful - read the response data into a string and print it to the console
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            println(response)
+
+            withContext(Dispatchers.Main) {
+                showToastMessage("User Deletion Successful")
             }
         } else {
             // Request unsuccessful - print an error message with the response code

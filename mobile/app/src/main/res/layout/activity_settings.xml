@@ -35,7 +35,7 @@
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:text="tokens for now"
+        android:text="delete user"
         android:background="@drawable/button_background"
         app:layout_constraintTop_toBottomOf="@id/btnLogout"
         tools:layout_editor_absoluteX="10dp"

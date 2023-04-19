@@ -40,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString()
         println(username)
         println(password)
-        prefs.writeUserName(username)
+
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 val result = loginRequest(username, password)
@@ -100,6 +100,7 @@ class LoginActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 showToastMessage("LOGIN SUCCESS")
             }
+            prefs.writeUserName(username)
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
