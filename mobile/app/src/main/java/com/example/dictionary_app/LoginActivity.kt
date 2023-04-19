@@ -24,10 +24,38 @@ class LoginActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+
+        val refreshToken = prefs.getRefreshToken()
+        if(refreshToken!=="noToken"){
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    refreshToken?.let { refreshTokeLoginRequest(it) }
+                } catch (e: Exception) {
+                    println(e.message)
+                }
+            }
+        }
+
+
         binding.btnLogin.setOnClickListener {onLoginClick()}
 
         binding.btnCreateUser.setOnClickListener { onCreateUserClick() }
     }
+    override fun onResume() {
+        super.onResume()
+        val refreshToken = prefs.getRefreshToken()
+        if(refreshToken!=="noToken"){
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    refreshToken?.let { refreshTokeLoginRequest(it) }
+                } catch (e: Exception) {
+                    println(e.message)
+                }
+            }
+        }
+
+    }
+
 
     private fun moveToMain(){
         val intent = Intent(this,MainActivity::class.java)
@@ -46,9 +74,8 @@ class LoginActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                val result = loginRequest(username, password)
-                // Handle the successful response here
-                println(result)
+                loginRequest(username, password)
+
             } catch (e: Exception) {
                 // Handle the error here
                 println(e.message)
@@ -107,12 +134,13 @@ class LoginActivity : AppCompatActivity() {
             // Request successful - read the response data into a string and print it to the console
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
-            // Send JSON string to parseTokens function
+            // Send JSON string to parseResponse function
             parseResponse(response)
             withContext(Dispatchers.Main) {
                 showToastMessage("LOGIN SUCCESS")
                 moveToMain()
             }
+
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
@@ -124,6 +152,53 @@ class LoginActivity : AppCompatActivity() {
         // Disconnect the connection to free up system resources
         conn.disconnect()
     }
+    private suspend fun refreshTokeLoginRequest(refreshToken: String) = withContext(Dispatchers.IO){
+        // Create a URL object with the URL we want to connect to
+        val url = URL("http://192.168.178.29:3000/login/token")
+
+        // Open an HTTP connection to the URL
+        val conn = url.openConnection() as HttpURLConnection
+
+        // Set the request method to POST, and enable output and input for the connection
+        conn.requestMethod = "POST"
+        conn.doOutput = true
+        conn.doInput = true
+
+        // Set the Content-Type header to indicate that we're sending a JSON payload
+        conn.setRequestProperty("Content-Type", "application/json")
+
+        // Create a JSON payload with the username and password
+        val body = "{ \"refreshToken\": \"$refreshToken\"}"
+
+        // Write the payload to the output stream of the connection
+        val output = OutputStreamWriter(conn.outputStream)
+        output.write(body)
+        output.flush()
+
+        // Check the response code to see if the request was successful
+        val responseCode = conn.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Request successful - read the response data into a string and print it to the console
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            println(response)
+            // Send JSON string to parseResponse function
+            parseResponse(response)
+            withContext(Dispatchers.Main) {
+                moveToMain()
+            }
+
+        } else {
+            // Request unsuccessful - print an error message with the response code
+            println("Error: $responseCode")
+        }
+
+        // Disconnect the connection to free up system resources
+        conn.disconnect()
+    }
+
+
+
+
 
     private fun showToastMessage(message: String) {
         Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
