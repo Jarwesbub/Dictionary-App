@@ -4,10 +4,10 @@
     android:shape="rectangle">
 
     <!-- Background color -->
-    <solid android:color="@color/grey_200" />
+    <solid android:color="?attr/colorBackgroundFloating" />
 
     <!-- Rounded corners -->
-    <corners android:radius="16dp" />
+    <corners android:radius="0dp" />
 
     <!-- Padding -->
     <padding

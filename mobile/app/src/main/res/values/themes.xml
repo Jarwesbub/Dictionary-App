@@ -6,11 +6,13 @@
         <item name="colorPrimaryVariant">@color/red_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/light_gold</item>
-        <item name="colorSecondaryVariant">@color/dark_gold</item>
+        <item name="colorSecondary">@color/dark_gold</item>
+        <item name="colorSecondaryVariant">@color/light_gold</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="flashCardColor">@color/light_gold</item>
+        <item name="textHighContrast">@color/black</item>
     </style>
 </resources>
