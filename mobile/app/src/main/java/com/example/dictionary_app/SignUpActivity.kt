@@ -1,7 +1,9 @@
 package com.example.dictionary_app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.dictionary_app.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -68,12 +70,29 @@ class SignUpActivity : AppCompatActivity() {
             // Request successful - read the response data into a string and print it to the console
             val response = conn.inputStream.bufferedReader().use { it.readText() }
             println(response)
+            withContext(Dispatchers.Main) {
+                showToastMessage("ACCOUNT CREATED!")
+                moveToLogin()
+            }
+
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
+            withContext(Dispatchers.Main) {
+            showToastMessage("THERE WAS AN ERROR: $responseCode")
+            }
         }
 
         // Disconnect the connection to free up system resources
         conn.disconnect()
+    }
+
+
+    private fun showToastMessage(message: String) {
+        Toast.makeText(this@SignUpActivity, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun moveToLogin(){
+        val intent = Intent(this,LoginActivity::class.java)
+        startActivity(intent)
     }
 }
