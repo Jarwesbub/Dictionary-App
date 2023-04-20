@@ -28,10 +28,10 @@ class SettingsActivity : AppCompatActivity() {
         val btnLogout = findViewById<Button>(R.id.btnLogout)
         val btnDeleteUser = findViewById<Button>(R.id.btnDeleteUser)
         //listen for switch state change
-        swDark.setOnCheckedChangeListener {_, isChecked ->
+        swDark.setOnCheckedChangeListener {_, _ ->
 
             //change between light and dark
-            if (swDark.isChecked) {
+            if (swDark.isChecked == true) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 swDark.text = "Dark Mode: Enabled"
             } else {
@@ -42,10 +42,11 @@ class SettingsActivity : AppCompatActivity() {
 
         btnLogout.setOnClickListener{
             val username = prefs.getUserName().toString()
+            val accessToken = prefs.getAccessToken().toString()
             val refreshToken = prefs.getRefreshToken().toString()
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val result = logoutRequest(username,refreshToken)
+                    val result = logoutRequest(username,refreshToken,accessToken)
                     // Handle the successful response here
                     println(result)
                 } catch (e: Exception) {
@@ -87,7 +88,7 @@ class SettingsActivity : AppCompatActivity() {
         finish()
     }
 
-    private suspend fun logoutRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
+    private suspend fun logoutRequest(username: String,refreshToken: String, accessToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://10.0.2.2:3000/logout")
 
@@ -101,6 +102,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set the Content-Type header to indicate that we're sending a JSON payload
         conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", accessToken)
 
         // Create a JSON payload with the username
         val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
@@ -131,7 +133,7 @@ class SettingsActivity : AppCompatActivity() {
         // Disconnect the connection to free up system resources
         conn.disconnect()
     }
-    private suspend fun deleteUserRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
+    private suspend fun deleteUserRequest(username: String,refreshToken: String, accessToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://10.0.2.2:3000/deleteuser")
 
@@ -145,6 +147,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set the Content-Type header to indicate that we're sending a JSON payload
         conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", accessToken)
 
         // Create a JSON payload with the username
         val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
@@ -185,10 +188,11 @@ class SettingsActivity : AppCompatActivity() {
             setMessage("If you confirm you will be automatically logged out and won't be able to access your account and associated data anymore.")
             setPositiveButton(android.R.string.ok) { _, _ ->
                 val username = prefs.getUserName().toString()
+                val accessToken = prefs.getAccessToken().toString()
                 val refreshToken = prefs.getRefreshToken().toString()
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val result = deleteUserRequest(username,refreshToken)
+                        val result = deleteUserRequest(username,refreshToken,accessToken)
                         // Handle the successful response here
                         println(result)
                     } catch (e: Exception) {
