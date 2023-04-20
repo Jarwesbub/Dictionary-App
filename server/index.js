@@ -4,6 +4,7 @@ const signupRoute = require("./route/signup_route");
 const userRoute = require("./route/user_route");
 const logoutRoute = require("./route/logout_route");
 const deleteuserRoute = require("./route/deleteuser_route");
+const flashcardRoute = require("./route/flashcard_route");
 
 const port = 3000;
 
@@ -22,6 +23,7 @@ app.use("/login", loginRoute);
 app.use("/user", userRoute);
 app.use("/logout", logoutRoute);
 app.use("/deleteuser", deleteuserRoute);
+app.use("/flashcard", flashcardRoute);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
