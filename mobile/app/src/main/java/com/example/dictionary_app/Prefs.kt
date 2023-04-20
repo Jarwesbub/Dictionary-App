@@ -26,7 +26,15 @@ class Prefs (context: Context){
     fun getRefreshToken(): String? {
         return preferences.getString("refreshToken","noToken")
     }
-
+    // Clear shared preferences for logging out user
+    fun clearSharedPreference() {
+        editor.clear()
+        editor.commit()
+    }
+    fun printTokens(){
+        println(preferences.getString("accessToken","noToken"))
+        println(preferences.getString("refreshToken","noToken"))
+        }
     // Save user data to SharedPreferences
     fun saveUserData(user_id: String, user_name: String){
         editor.putString("user_id",user_id)
@@ -34,11 +42,10 @@ class Prefs (context: Context){
         editor.apply()
         println("user data saved")
     }
-
     fun getUserName(): String? {
         return preferences.getString("user_name", "noName")
     }
     fun getIdName(): String? {
-        return preferences.getString("user_id", "noId")
+        return preferences.getString("user_id", "noId"
     }
 }

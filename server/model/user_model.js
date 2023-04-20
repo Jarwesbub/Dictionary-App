@@ -31,7 +31,7 @@ createUser = (username, password) => {
 };
 
 deleteUser = (userId) => {
-  const query = "DELETE * FROM users WHERE user_id=?";
+  const query = "DELETE FROM users WHERE user_id=?";
   return new Promise((resolve, reject) => {
     database.query(query, [userId], (error, result) => {
       if (error) reject(error);

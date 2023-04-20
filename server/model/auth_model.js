@@ -54,8 +54,21 @@ updateRefreshToken = (userId, refreshToken) => {
   });
 };
 
+deleteRefreshTokens = (userId) => {
+  const user_Id = userId;
+
+  const query = "DELETE FROM refresh_tokens WHERE user_id=?;";
+  return new Promise((resolve, reject) => {
+    database.query(query, [user_Id], (error, result) => {
+        if (error) reject(error);
+        resolve(result);
+      });
+  });
+};
+
 module.exports = {
   saveRefreshToken,
   getRefreshToken,
   updateRefreshToken,
+  deleteRefreshTokens,
 };
