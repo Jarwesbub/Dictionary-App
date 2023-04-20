@@ -140,7 +140,6 @@ class LoginActivity : AppCompatActivity() {
                 showToastMessage("LOGIN SUCCESS")
                 moveToMain()
             }
-
         } else {
             // Request unsuccessful - print an error message with the response code
             println("Error: $responseCode")
