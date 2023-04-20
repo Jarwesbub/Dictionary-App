@@ -2,9 +2,11 @@ package com.example.dictionary_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -49,7 +51,6 @@ class SettingsActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     // Handle the error here
                     println(e.message)
-
                 }
             }
             //clear tokens from preferences
@@ -61,24 +62,7 @@ class SettingsActivity : AppCompatActivity() {
 
         btnDeleteUser.setOnClickListener{
             Toast.makeText(this,"Delete user",Toast.LENGTH_SHORT).show()
-            prefs.printTokens()
-            updateTextViews()
-            val username = prefs.getUserName().toString()
-            val refreshToken = prefs.getRefreshToken().toString()
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val result = deleteUserRequest(username,refreshToken)
-                    // Handle the successful response here
-                    println(result)
-                } catch (e: Exception) {
-                    // Handle the error here
-                    println(e.message)
-
-                }
-            }
-            prefs.clearSharedPreference()
-            updateTextViews()
-            returnToLogin()
+            deleteUserAlert()
         }
 
         //check if dark mode is enabled and set switch to true if it is
@@ -87,7 +71,7 @@ class SettingsActivity : AppCompatActivity() {
         }
         updateTextViews()
     }
-    fun updateTextViews() {
+    private fun updateTextViews() {
         val usrView = findViewById<TextView>(R.id.usrView)
         val accView = findViewById<TextView>(R.id.accView)
         val refView = findViewById<TextView>(R.id.refView)
@@ -96,7 +80,7 @@ class SettingsActivity : AppCompatActivity() {
         refView.text = "RefreshToken: " + prefs.getRefreshToken()
     }
 
-    fun returnToLogin(){
+    private fun returnToLogin(){
         //return to login screen and close activities
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
@@ -193,5 +177,34 @@ class SettingsActivity : AppCompatActivity() {
     }
     private fun showToastMessage(message: String) {
         Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_SHORT).show()
+    }
+    private fun deleteUserAlert(){
+        val builder = AlertDialog.Builder(this)
+        with(builder) {
+            setTitle("Do you want to delete your account?")
+            setMessage("If you confirm you will be automatically logged out and won't be able to access your account and associated data anymore.")
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                val username = prefs.getUserName().toString()
+                val refreshToken = prefs.getRefreshToken().toString()
+                CoroutineScope(Dispatchers.Main).launch {
+                    try {
+                        val result = deleteUserRequest(username,refreshToken)
+                        // Handle the successful response here
+                        println(result)
+                    } catch (e: Exception) {
+                        // Handle the error here
+                        println(e.message)
+                    }
+                }
+                prefs.clearSharedPreference()
+                updateTextViews()
+                returnToLogin()
+            }
+            setNegativeButton(android.R.string.cancel) { _, _ ->
+                Toast.makeText(applicationContext,
+                    android.R.string.cancel, Toast.LENGTH_SHORT).show()
+            }
+            show()
+        }
     }
 }
