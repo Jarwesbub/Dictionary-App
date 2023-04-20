@@ -60,11 +60,13 @@ class LoginActivity : AppCompatActivity() {
     private fun moveToMain(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun onCreateUserClick(){
         val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun onLoginClick(){
