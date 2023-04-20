@@ -89,7 +89,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private suspend fun logoutRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://10.0.2.2:3000/logout")
+        val url = URL("http://64.227.75.70/node/logout")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
@@ -133,7 +133,7 @@ class SettingsActivity : AppCompatActivity() {
     }
     private suspend fun deleteUserRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://10.0.2.2:3000/deleteuser")
+        val url = URL("http://64.227.75.70/node/deleteuser")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection

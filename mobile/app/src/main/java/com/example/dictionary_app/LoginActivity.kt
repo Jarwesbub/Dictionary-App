@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
 
     private suspend fun loginRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://192.168.178.29:3000/login")
+        val url = URL("http://64.227.75.70/node/login")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
@@ -153,7 +153,7 @@ class LoginActivity : AppCompatActivity() {
     }
     private suspend fun refreshTokeLoginRequest(refreshToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://192.168.178.29:3000/login/token")
+        val url = URL("http://64.227.75.70/node/login/token")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection

@@ -43,7 +43,7 @@ class SignUpActivity : AppCompatActivity() {
     }
     private suspend fun signUpRequest(username: String, password: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://{server ip here}:3000/signup")
+        val url = URL("http://64.227.75.70/node/signup")
 
         // Open an HTTP connection to the URL
         val conn = url.openConnection() as HttpURLConnection
