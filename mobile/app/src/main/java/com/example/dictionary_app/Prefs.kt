@@ -15,6 +15,7 @@ class Prefs (context: Context){
     fun writeTokens(accessToken: String, refreshToken: String){
         editor.putString("accessToken",accessToken)
         editor.putString("refreshToken",refreshToken)
+        editor.apply()
         println("saved tokens")
     }
     // Retrieve the access token from SharedPreferences. If there is no token return noToken
@@ -26,4 +27,18 @@ class Prefs (context: Context){
         return preferences.getString("refreshToken","noToken")
     }
 
+    // Save user data to SharedPreferences
+    fun saveUserData(user_id: String, user_name: String){
+        editor.putString("user_id",user_id)
+        editor.putString("user_name",user_name)
+        editor.apply()
+        println("user data saved")
+    }
+
+    fun getUserName(): String? {
+        return preferences.getString("user_name", "noName")
+    }
+    fun getIdName(): String? {
+        return preferences.getString("user_id", "noId")
+    }
 }
