@@ -18,14 +18,14 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
-var inputWord: (String?) = null
+var inputWord: String? = null
+
+// Activity for searching and handling data from "jisho.org" API
 
 class SearchActivity : AppCompatActivity() {
     private val internalStorage: InternalStorage = InternalStorage(this)
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var firstWord: List<String>
-    private lateinit var secondWord: List<String>
-    private lateinit var thirdWord: List<String>
+    private lateinit var currentWordsList: ArrayList<List<String>>
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +33,9 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        resetAll()
-        internalStorage.setInternalStorage()
+        currentWordsList = ArrayList()
+        resetAll()                              // Resets all the textViews and visibility
+        internalStorage.setInternalStorage()    // Sets the internal storage data for ready to use
 
         val firstFav = binding.buFavourite0
         firstFav.tag = "off"
@@ -56,6 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    // Resets all the textViews and hides the words in layout
     private fun resetAll() {
         binding.tvApiJapWord0.text = ""
         binding.tvApiJapReading0.text = ""
@@ -76,8 +78,9 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    // Button for searching the word
     fun onClickGetFromApi(view: View?) {
-        var inputText:EditText = findViewById(R.id.etApiTest)
+        val inputText:EditText = binding.etApiTest
 
         if(inputText.text.isNotEmpty()) {
             inputWord = inputText.text.toString().lowercase()
@@ -85,17 +88,23 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    // Function for getting data from the API
     private fun fetchJsonData(): Thread {
         return Thread {
             val url = URL("https://jisho.org/api/v1/search/words?keyword=$inputWord")
             val connection = url.openConnection() as HttpsURLConnection
 
+            // Connected successfully
             if(connection.responseCode == 200) {
                 val inputSystem = connection.inputStream
                 val inputStreamReader = InputStreamReader(inputSystem, "UTF-8")
+
+                // Creates Gson object from inputStreamReader data
+                // Filters data by taking only necessary data that matches with the ApiRequest class
                 val request = Gson().fromJson(inputStreamReader, ApiRequest::class.java)
 
-                updateUITest(request)
+                // Sets filtered request data to UI
+                setAPIRequestDataToUI(request)
                 inputStreamReader.close()
                 inputSystem.close()
             }
@@ -108,19 +117,22 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUITest(request: ApiRequest) {
+    // Sets UI data from the Gson object
+    private fun setAPIRequestDataToUI(request: ApiRequest) {
         runOnUiThread {
             kotlin.run {
                 if (request.data.isNotEmpty()) {
                     resetAll()
+                    currentWordsList.clear()
 
-                    var index = 2
-                    if(request.data.size-1<index) {
-                        index = request.data.size -1
+                    var maxIndex = 2 // How many words we want to take from the request data by index
+                    if(request.data.size-1<maxIndex) { // Checks if there is not enough data for the current index
+                        maxIndex = request.data.size -1
                     }
-                    for(n in 0..index) {
-                        val word: String = request.data[n].japanese[0].word
-                        val reading: String = request.data[n].japanese[0].reading
+
+                    for(n in 0..maxIndex) { // Loops the data to the UI and updates layouts
+                        val word = request.data[n].japanese[0].word.orEmpty()
+                        val reading: String = request.data[n].japanese[0].reading.orEmpty()
                         val englishDef: String = request.data[n].senses[0].english_definitions.joinToString()
                         createLayout(n, word,reading,englishDef)
                     }
@@ -135,83 +147,71 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    // Creates/updates the values to layout
     private fun createLayout(index: Int, japWord: String, japReading: String, englishDefinition: String) {
-        val maxWordWidth = 4
-        val maxReadingWidth = 6
-        var word = japWord
-        var reading = japReading
-        var favButton: ImageButton
+        val maxWordLength = 4       // Max width for japanese word
+        val maxReadingLength = 6    // Max length for japanese reading
+        var word = japWord          // Japanese word
+        var reading = japReading    // Japanese reading
+        var favButton: ImageButton  // Favourite button inside the layout
 
-        if(japWord != null && japWord.length>maxWordWidth) {
-            word = ""
-            val wordArray = japWord.chunked(maxWordWidth)
-            for(w in wordArray) {
-                word += w + "\n"
+        // If word is too wide to handle in UI -> set lineBreaks based on max length
+        if(japWord.length>maxWordLength) {
+            word = setLineBreaksByLength(japWord, maxWordLength)
+
+        }
+
+        // If word is too wide to handle in UI -> set lineBreaks based on max length
+        if(japReading.length>maxWordLength) {
+            reading = setLineBreaksByLength(japReading, maxReadingLength)
+
+        }
+
+        var romaji: String = Wanakana.toRomaji(reading).orEmpty()   // Non-japanese reading
+
+        // Sets all the UI texts based on current index
+        when(index) {
+            0 -> {
+                binding.tvApiJapWord0.text = word
+                binding.tvApiJapReading0.text = reading
+                binding.tvApiJapRomaji0.text = romaji
+                binding.tvApiEngDefinition0.text = englishDefinition
+                binding.llFirstWord.isVisible = true
+                favButton = binding.buFavourite0
+            }
+            1 -> {
+                binding.tvApiJapWord1.text = word
+                binding.tvApiJapReading1.text = reading
+                binding.tvApiJapRomaji1.text = romaji
+                binding.tvApiEngDefinition1.text = englishDefinition
+                binding.llSecondWord.isVisible = true
+                favButton = binding.buFavourite1
+            }
+            else -> {
+                binding.tvApiJapWord2.text = word
+                binding.tvApiJapReading2.text = reading
+                binding.tvApiJapRomaji2.text = romaji
+                binding.tvApiEngDefinition2.text = englishDefinition
+                binding.llThirdWord.isVisible = true
+                favButton = binding.buFavourite2
             }
         }
 
-        if(japReading != null && japReading.length>maxWordWidth) {
-            reading = ""
-            val readingArray = japReading.chunked(maxReadingWidth)
-            for(w in readingArray) {
-                reading += w + "\n"
-            }
-        }
+        // Adds non-filtered words to list
+        currentWordsList.add(
+            listOf(englishDefinition,
+                japWord,
+                japReading,
+                romaji))
 
-        var romaji = Wanakana.toRomaji(reading)
-
-        if(index===0) {
-            firstWord = listOf(englishDefinition,
-                checkIfNullValue(japWord),
-                checkIfNullValue(japReading),
-                checkIfNullValue(romaji))
-
-            binding.tvApiJapWord0.text = word
-            binding.tvApiJapReading0.text = reading
-            binding.tvApiJapRomaji0.text = romaji
-            binding.tvApiEngDefinition0.text = englishDefinition
-            binding.llFirstWord.isVisible = true
-            favButton = binding.buFavourite0
-
-        } else if(index===1) {
-            secondWord = listOf(englishDefinition,
-                checkIfNullValue(japWord),
-                checkIfNullValue(japReading),
-                checkIfNullValue(romaji))
-
-            binding.tvApiJapWord1.text = word
-            binding.tvApiJapReading1.text = reading
-            binding.tvApiJapRomaji1.text = romaji
-            binding.tvApiEngDefinition1.text = englishDefinition
-            binding.llSecondWord.isVisible = true
-            favButton = binding.buFavourite1
-        }
-        else {
-            thirdWord = listOf(englishDefinition,
-                checkIfNullValue(japWord),
-                checkIfNullValue(japReading),
-                checkIfNullValue(romaji))
-
-            binding.tvApiJapWord2.text = word
-            binding.tvApiJapReading2.text = reading
-            binding.tvApiJapRomaji2.text = romaji
-            binding.tvApiEngDefinition2.text = englishDefinition
-            binding.llThirdWord.isVisible = true
-            favButton = binding.buFavourite2
-        }
-        val isFavButtonActive = internalStorage.checkIfKeyIsOnTheMap(englishDefinition)
-        setFavouriteButton(favButton, isFavButtonActive)
+        // Sets favourite button active or nonactive
+        val isFavButtonActive = internalStorage.checkIfValueByKeyIsOnTheMap(englishDefinition, romaji)
+        setFavouriteButtonImage(favButton, isFavButtonActive)
     }
 
-    private fun checkIfNullValue(value: String):String {
-        return if(value===null){
-            " "
-        } else{
-            value
-        }
-    }
 
-    private fun setFavouriteButton(favButton: ImageButton, setOn: Boolean) {
+    // Sets favourite button's image based on tag: "on" or "off"
+    private fun setFavouriteButtonImage(favButton: ImageButton, setOn: Boolean) {
         if(setOn) {
             favButton.tag = "on"
             favButton.setImageDrawable(
@@ -232,18 +232,29 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    // Sets lineBreaks to the String value based on max length
+    private fun setLineBreaksByLength(value: String, maxWidth: Int) :String {
+        val valueArray = value.chunked(maxWidth)
+        var newValue = ""
+        for(w in valueArray) {
+            newValue += w + "\n"
+        }
+        return newValue
+    }
+
+    // Adds word to the favourites
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun buttonAddWordToFavourite(index: Int, favButton: ImageButton) {
             if (favButton.tag==="off") {         // Add to favorites list
                 saveToStorage(index)
-                setFavouriteButton(favButton, true)
+                setFavouriteButtonImage(favButton, true)
                 Toast.makeText(
                     applicationContext,
                     "Added to the favourites", Toast.LENGTH_SHORT
                 ).show()
             } else {                            // Remove from favourites list
                 removeFromStorage(index)
-                setFavouriteButton(favButton, false)
+                setFavouriteButtonImage(favButton, false)
                 Toast.makeText(
                     applicationContext,
                     "Removed from the favourites", Toast.LENGTH_SHORT
@@ -251,24 +262,25 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
+    // Writes String values based on the index from internal storage
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun saveToStorage(index: Int){
-        if(index===0) {
-            internalStorage.writeToInternalStorage(firstWord[0],firstWord[1],firstWord[2],firstWord[3])
-        } else if (index===1) {
-            internalStorage.writeToInternalStorage(secondWord[0],secondWord[1],secondWord[2],secondWord[3])
-        } else {
-            internalStorage.writeToInternalStorage(thirdWord[0],thirdWord[1],thirdWord[2],thirdWord[3])
+    private fun saveToStorage(index: Int) {
+        if(currentWordsList[index] !== null) {
+            val english = currentWordsList[index][0]
+            val word = currentWordsList[index][1]
+            val reading = currentWordsList[index][2]
+            val romaji = currentWordsList[index][3]
+            internalStorage.writeToInternalStorage(english, word, reading,  romaji)
         }
     }
+
+    // Removes String values based on the index from internal storage
     private fun removeFromStorage(index: Int) {
-        if(index===0) {
-            internalStorage.removeFromInternalStorage(firstWord[0])
-        } else if (index===1) {
-            internalStorage.removeFromInternalStorage(secondWord[0])
-        } else {
-            internalStorage.removeFromInternalStorage(thirdWord[0])
+        if(currentWordsList[index] !== null) {
+            val englishDefinition = currentWordsList[index][0]
+            internalStorage.removeFromInternalStorage(englishDefinition)
         }
     }
 
 }
+
