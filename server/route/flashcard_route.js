@@ -12,7 +12,8 @@ flashcardRouter.put('/highscore', async (req, res) => {
     const score = req.body.score;
     try{
         const response = await flashcard.getHighScore(user_id);
-        if(response.length == 0){
+        console.log(response[0])
+        if(response[0] === undefined){
             const response = await flashcard.postHighScore(user_id, score);
             res.status(200).json(response);
         } else if(response[0].score < score){
@@ -32,6 +33,18 @@ flashcardRouter.post('/highscore', async (req, res) => {
     const score = req.body.score;
     try{
         const response = await flashcard.postHighScore(user_id, score);
+        res.status(200).json(response);
+    }
+    catch(error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+});
+
+flashcardRouter.get('/highscore/:user_id', async (req, res) => {
+    const user_id = req.params.user_id;
+    try{
+        const response = await flashcard.getHighScore(user_id);
         res.status(200).json(response);
     }
     catch(error) {

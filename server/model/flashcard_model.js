@@ -14,8 +14,8 @@ updateHighScore = (user_id, score) => {
     const query = "UPDATE high_scores SET score = ? WHERE user_id = ?";
     return new Promise((resolve, reject) => {
         database.query(query, [score, user_id], (error, result) => {
-        if (error) reject(error);
-        resolve(result);
+            if (error) reject(error);
+            resolve(result);
         });
     });
 };

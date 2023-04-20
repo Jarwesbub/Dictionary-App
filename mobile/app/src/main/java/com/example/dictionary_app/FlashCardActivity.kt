@@ -10,12 +10,15 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dev.esnault.wanakana.core.Wanakana
 import kotlinx.coroutines.*
+import java.io.IOException
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
 
 data class Question(val kanji: String, val meaning: String, val reading: String)
+
+data class HighscoreResponse(val userId: String, val score: Int)
 
 data class Kanji(
     val grade: Int,
@@ -44,6 +47,7 @@ class FlashCardActivity : AppCompatActivity() {
     private var currentQuestionIndex = 0
     private var points = 0
     private var attempts = 3
+    private var highScore = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +74,8 @@ class FlashCardActivity : AppCompatActivity() {
                 }
             }
             loadDefaultQuestionList()
+            getHighscore(applicationContext, Integer.parseInt(prefs.getIdName()))
         }
-
 
         val spinner = binding.spnrDifficulty
         val items = arrayOf("Easy", "Medium", "Hard")
@@ -151,12 +155,22 @@ class FlashCardActivity : AppCompatActivity() {
                 questionText.textSize = 72F
                 hintText.text = ""
                 readingText.text = ""
+                GlobalScope.launch {
+                    val userId = prefs.getIdName()
+                    putHighscore(applicationContext, Integer.parseInt(userId), points)
+                    getHighscore(applicationContext, Integer.parseInt(userId))
+                }
             } else if(attempts == 0) {
                 nextButton.isEnabled = false
                 questionText.text = "You Lost, reached score of $points"
                 questionText.textSize = 52F
                 hintText.text = ""
                 readingText.text = ""
+                GlobalScope.launch {
+                    val userId = prefs.getIdName()
+                    putHighscore(applicationContext, Integer.parseInt(userId), points)
+                    getHighscore(applicationContext, Integer.parseInt(userId))
+                }
             } else {
                 updateQuestion()
             }
@@ -224,7 +238,7 @@ class FlashCardActivity : AppCompatActivity() {
         val conn = url.openConnection() as HttpURLConnection
 
         // Set the request method to POST, and enable output and input for the connection
-        conn.requestMethod = "POST"
+        conn.requestMethod = "PUT"
         conn.doOutput = true
         conn.doInput = true
 
@@ -251,6 +265,34 @@ class FlashCardActivity : AppCompatActivity() {
 
         // Disconnect the connection to free up system resources
         conn.disconnect()
+    }
+
+    private suspend fun getHighscore(context: Context, user_id: Int) {
+        val url = URL("http://10.0.2.2:3000/flashcard/highscore/$user_id")
+        return withContext(Dispatchers.IO) { // launch a coroutine on the IO thread
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream = connection.inputStream
+                val response = inputStream.bufferedReader().use { it.readText() }
+                val gson = Gson()
+                val dataArray = gson.fromJson(response, Array<HighscoreResponse>::class.java)
+                if (dataArray.isNotEmpty()) {
+                    val score = dataArray[0].score
+                    println(score)
+                    connection.disconnect()
+                    withContext(Dispatchers.Main) {
+                        val highscoreTextView = binding.textViewHighscore
+                        highscoreTextView.text = "Highscore of $score points"
+                    }
+                } else {
+                    throw IOException("Response array is empty")
+                }
+            } else {
+                throw IOException("HTTP error code: $responseCode")
+            }
+        }
     }
 
     private fun makeHintString(hint: String): String {
