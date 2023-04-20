@@ -46,6 +46,6 @@ class Prefs (context: Context){
         return preferences.getString("user_name", "noName")
     }
     fun getIdName(): String? {
-        return preferences.getString("user_id", "noId"
+        return preferences.getString("user_id", "noId")
     }
 }
