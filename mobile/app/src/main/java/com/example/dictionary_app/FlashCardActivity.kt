@@ -1,7 +1,6 @@
 package com.example.dictionary_app
 
 import android.content.Context
-import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -11,6 +10,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dev.esnault.wanakana.core.Wanakana
 import kotlinx.coroutines.*
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
 import java.net.URL
 
 
@@ -212,6 +213,44 @@ class FlashCardActivity : AppCompatActivity() {
             }
             kanjiList
         }
+    }
+
+    private suspend fun putHighscore(context: Context, user_id: Int, score: Int) {
+        // Create a URL object with the URL we want to connect to
+        val url = URL("http://10.0.2.2:3000/flashcard/highscore")
+
+
+        // Open an HTTP connection to the URL
+        val conn = url.openConnection() as HttpURLConnection
+
+        // Set the request method to POST, and enable output and input for the connection
+        conn.requestMethod = "POST"
+        conn.doOutput = true
+        conn.doInput = true
+
+        // Set the Content-Type header to indicate that we're sending a JSON payload
+        conn.setRequestProperty("Content-Type", "application/json")
+
+        // Create a JSON payload with the username and password
+        val body = "{ \"user_id\": \"$user_id\", \"score\": \"$score\" }"
+
+        val output = OutputStreamWriter(conn.outputStream)
+        output.write(body)
+        output.flush()
+
+        // Check the response code to see if the request was successful
+        val responseCode = conn.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Request successful - read the response data into a string and print it to the console
+            val response = conn.inputStream.bufferedReader().use { it.readText() }
+            println(response)
+        } else {
+            // Request unsuccessful - print an error message with the response code
+            println("Error: $responseCode")
+        }
+
+        // Disconnect the connection to free up system resources
+        conn.disconnect()
     }
 
     private fun makeHintString(hint: String): String {
