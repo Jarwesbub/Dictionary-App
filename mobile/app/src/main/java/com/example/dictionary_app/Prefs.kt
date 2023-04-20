@@ -2,6 +2,7 @@ package com.example.dictionary_app
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 
 class Prefs (context: Context){
     // Initialize a SharedPreferences object with the name "preferences"
@@ -47,5 +48,20 @@ class Prefs (context: Context){
     }
     fun getIdName(): String? {
         return preferences.getString("user_id", "noId")
+    }
+
+    fun rememberDarkMode(option: Boolean){
+        editor.putBoolean("dark_mode",option)
+        editor.apply()
+    }
+
+    fun getDarkMode(): Boolean {
+        return preferences.getBoolean("dark_mode", false)
+    }
+
+    fun restoreDarkModeState(){
+        if (prefs.getDarkMode()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
     }
 }

@@ -31,12 +31,16 @@ class SettingsActivity : AppCompatActivity() {
         swDark.setOnCheckedChangeListener {_, _ ->
 
             //change between light and dark
-            if (swDark.isChecked == true) {
+            if (swDark.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 swDark.text = "Dark Mode: Enabled"
+                //save preference
+                prefs.rememberDarkMode(swDark.isChecked)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 swDark.text = "Dark Mode: Disabled"
+                //save preference
+                prefs.rememberDarkMode(swDark.isChecked)
             }
         }
 
@@ -55,19 +59,26 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
             //clear tokens from preferences
+            //but before that save dark mode state so app doesn't forget
+            val dmRemember = prefs.getDarkMode()
             prefs.clearSharedPreference()
             updateTextViews()
             Toast.makeText(this,"LogOut.",Toast.LENGTH_SHORT).show()
+            prefs.rememberDarkMode(dmRemember)
             returnToLogin()
         }
 
         btnDeleteUser.setOnClickListener{
             Toast.makeText(this,"Delete user",Toast.LENGTH_SHORT).show()
+            //save dark mode state
+            val dmRemember = prefs.getDarkMode()
             deleteUserAlert()
+            //re-enter dark mode state
+            prefs.rememberDarkMode(dmRemember)
         }
 
         //check if dark mode is enabled and set switch to true if it is
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || prefs.getDarkMode()) {
             swDark.isChecked = true
         }
         updateTextViews()

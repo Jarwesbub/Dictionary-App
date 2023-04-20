@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.dictionary_app.databinding.ActivityMainBinding
 
 
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, WordListActivity::class.java)
             startActivity(intent)
         }
-
+        prefs.restoreDarkModeState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

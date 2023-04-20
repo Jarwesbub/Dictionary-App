@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        prefs.restoreDarkModeState()
 
         val refreshToken = prefs.getRefreshToken()
         if(refreshToken!=="noToken"){
