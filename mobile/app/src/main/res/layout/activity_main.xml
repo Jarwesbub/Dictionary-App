@@ -41,26 +41,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
+        android:background="@drawable/button_background"
         android:onClick="openFlashCards"
         android:text="Flash Cards"
-        android:background="@drawable/button_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buFavWords"
-        app:layout_constraintBottom_toTopOf="@id/btnGoToLogin"
         app:layout_constraintVertical_chainStyle="packed" />
-
-    <Button
-        android:id="@+id/btnGoToLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:text="Go to login"
-        android:background="@drawable/button_background"
-        app:layout_constraintTop_toBottomOf="@id/buFlashCard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
