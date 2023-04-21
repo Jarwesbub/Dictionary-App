@@ -16,6 +16,10 @@
         <item name="flashCardColor">@color/dark_gold</item>
         <item name="textHighContrast">@color/white</item>
     </style>
-
-
+    <style name="AlertDialogCustom" parent="@android:style/Theme.Material.Dialog">
+        <item name="colorPrimary">@color/dark_gold</item>
+        <item name="android:textColorPrimary">@color/light_gold</item>
+        <item name="android:textColor">@color/dark_gold</item>
+        <item name="android:background">@color/dark_red_700</item>
+    </style>
 </resources>

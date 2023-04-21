@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        prefs.restoreDarkModeState()
 
         val refreshToken = prefs.getRefreshToken()
         if(refreshToken!=="noToken"){
@@ -60,11 +60,13 @@ class LoginActivity : AppCompatActivity() {
     private fun moveToMain(){
         val intent = Intent(this,MainActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun onCreateUserClick(){
         val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
+        finish()
     }
 
     private fun onLoginClick(){

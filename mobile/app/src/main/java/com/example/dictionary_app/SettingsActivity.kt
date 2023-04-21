@@ -2,6 +2,7 @@ package com.example.dictionary_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -28,24 +29,29 @@ class SettingsActivity : AppCompatActivity() {
         val btnLogout = findViewById<Button>(R.id.btnLogout)
         val btnDeleteUser = findViewById<Button>(R.id.btnDeleteUser)
         //listen for switch state change
-        swDark.setOnCheckedChangeListener {_, isChecked ->
+        swDark.setOnCheckedChangeListener {_, _ ->
 
             //change between light and dark
             if (swDark.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 swDark.text = "Dark Mode: Enabled"
+                //save preference
+                prefs.rememberDarkMode(swDark.isChecked)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 swDark.text = "Dark Mode: Disabled"
+                //save preference
+                prefs.rememberDarkMode(swDark.isChecked)
             }
         }
 
         btnLogout.setOnClickListener{
             val username = prefs.getUserName().toString()
+            val accessToken = prefs.getAccessToken().toString()
             val refreshToken = prefs.getRefreshToken().toString()
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val result = logoutRequest(username,refreshToken)
+                    val result = logoutRequest(username,refreshToken,accessToken)
                     // Handle the successful response here
                     println(result)
                 } catch (e: Exception) {
@@ -54,19 +60,26 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
             //clear tokens from preferences
+            //but before that save dark mode state so app doesn't forget
+            val dmRemember = prefs.getDarkMode()
             prefs.clearSharedPreference()
             updateTextViews()
             Toast.makeText(this,"LogOut.",Toast.LENGTH_SHORT).show()
+            prefs.rememberDarkMode(dmRemember)
             returnToLogin()
         }
 
         btnDeleteUser.setOnClickListener{
             Toast.makeText(this,"Delete user",Toast.LENGTH_SHORT).show()
+            //save dark mode state
+            val dmRemember = prefs.getDarkMode()
             deleteUserAlert()
+            //re-enter dark mode state
+            prefs.rememberDarkMode(dmRemember)
         }
 
         //check if dark mode is enabled and set switch to true if it is
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES || prefs.getDarkMode()) {
             swDark.isChecked = true
         }
         updateTextViews()
@@ -87,7 +100,7 @@ class SettingsActivity : AppCompatActivity() {
         finish()
     }
 
-    private suspend fun logoutRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
+    private suspend fun logoutRequest(username: String,refreshToken: String, accessToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://64.227.75.70/node/logout")
 
@@ -101,6 +114,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set the Content-Type header to indicate that we're sending a JSON payload
         conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", accessToken)
 
         // Create a JSON payload with the username
         val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
@@ -131,7 +145,7 @@ class SettingsActivity : AppCompatActivity() {
         // Disconnect the connection to free up system resources
         conn.disconnect()
     }
-    private suspend fun deleteUserRequest(username: String,refreshToken: String) = withContext(Dispatchers.IO){
+    private suspend fun deleteUserRequest(username: String,refreshToken: String, accessToken: String) = withContext(Dispatchers.IO){
         // Create a URL object with the URL we want to connect to
         val url = URL("http://64.227.75.70/node/deleteuser")
 
@@ -145,6 +159,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Set the Content-Type header to indicate that we're sending a JSON payload
         conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", accessToken)
 
         // Create a JSON payload with the username
         val body = "{ \"username\": \"$username\", \"refresh_token\": \"$refreshToken\" }"
@@ -179,16 +194,17 @@ class SettingsActivity : AppCompatActivity() {
         Toast.makeText(this@SettingsActivity, message, Toast.LENGTH_SHORT).show()
     }
     private fun deleteUserAlert(){
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialogCustom))
         with(builder) {
             setTitle("Do you want to delete your account?")
             setMessage("If you confirm you will be automatically logged out and won't be able to access your account and associated data anymore.")
             setPositiveButton(android.R.string.ok) { _, _ ->
                 val username = prefs.getUserName().toString()
+                val accessToken = prefs.getAccessToken().toString()
                 val refreshToken = prefs.getRefreshToken().toString()
                 CoroutineScope(Dispatchers.Main).launch {
                     try {
-                        val result = deleteUserRequest(username,refreshToken)
+                        val result = deleteUserRequest(username,refreshToken,accessToken)
                         // Handle the successful response here
                         println(result)
                     } catch (e: Exception) {

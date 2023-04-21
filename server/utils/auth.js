@@ -35,22 +35,20 @@ generaRefreshToken = async (userId, username) => {
   }
 };
 
-verifyAccessToken = (req, res, next) => {
+verifyAccessToken = (req, res) => {
   // Get the authorization header from the request
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.headers["authorization"];
   if (token == null) {
     return res.sendStatus(401);
   }
   // Verify the token using the secret key
-
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
       return res.sendStatus(403);
     }
     // Set the user object on the request for use in subsequent middleware and routes
     req.user = user;
-    next();
+    //res.end();
   });
 };
 verifyRefreshToken = async (token) => {

@@ -94,5 +94,6 @@ class SignUpActivity : AppCompatActivity() {
     private fun moveToLogin(){
         val intent = Intent(this,LoginActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }
