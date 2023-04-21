@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/spinner_background" />
+    <item>
+        <bitmap
+            android:gravity="end|center_vertical"
+            android:paddingEnd="8dp"
+            android:src="@android:drawable/arrow_down_float"
+            android:tint="?attr/colorOnBackground" />
+    </item>
+</layer-list>

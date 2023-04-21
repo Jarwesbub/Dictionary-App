@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+kanji-wanikani.json
+/.idea/deploymentTargetDropDown.xml
