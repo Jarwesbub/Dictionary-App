@@ -217,7 +217,7 @@ class FlashCardActivity : AppCompatActivity() {
     private suspend fun getKanjiFromJson(context: Context): List<KanjiEntry> {
         return withContext(Dispatchers.IO) { // launch a coroutine on the IO thread
             val jsonString =
-                URL("http://10.0.2.2:3000/flashcard/").readText() // perform network operation
+                URL("http://64.227.75.70/node/flashcard/").readText() // perform network operation
             val kanjiMapType = object : TypeToken<Map<String, Kanji>>() {}.type
             val kanjiMap: Map<String, Kanji> = Gson().fromJson(jsonString, kanjiMapType)
             val kanjiList = mutableListOf<KanjiEntry>()
@@ -231,7 +231,7 @@ class FlashCardActivity : AppCompatActivity() {
 
     private suspend fun putHighscore(context: Context, user_id: Int, score: Int) {
         // Create a URL object with the URL we want to connect to
-        val url = URL("http://10.0.2.2:3000/flashcard/highscore")
+        val url = URL("http://64.227.75.70/node/flashcard/highscore")
 
 
         // Open an HTTP connection to the URL
@@ -268,7 +268,7 @@ class FlashCardActivity : AppCompatActivity() {
     }
 
     private suspend fun getHighscore(context: Context, user_id: Int) {
-        val url = URL("http://10.0.2.2:3000/flashcard/highscore/$user_id")
+        val url = URL("http://64.227.75.70/node/flashcard/highscore/$user_id")
         return withContext(Dispatchers.IO) { // launch a coroutine on the IO thread
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
