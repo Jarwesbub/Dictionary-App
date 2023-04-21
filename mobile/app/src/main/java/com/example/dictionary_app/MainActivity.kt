@@ -19,10 +19,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.btnGoToLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-        }
 
         binding.buFlashCard.setOnClickListener {
             val intent = Intent(this, FlashCardActivity::class.java)
