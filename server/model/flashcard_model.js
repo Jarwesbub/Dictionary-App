@@ -25,7 +25,8 @@ getHighScore = (user_id) => {
     return new Promise((resolve, reject) => {
         database.query(query, [user_id], (error, result) => {
             if (error) reject(error);
-            resolve(result);
+            else if (result.length === 0) resolve(null)
+            else resolve(result);
         });
     });
 };
