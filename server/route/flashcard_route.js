@@ -11,8 +11,7 @@ flashcardRouter.put("/highscore", async (req, res) => {
   const score = req.body.score;
   try {
     const response = await flashcard.getHighScore(user_id);
-    console.log(response[0]);
-    if (response[0] === undefined) {
+    if (response === null) {
       const response = await flashcard.postHighScore(user_id, score);
       res.status(200).json(response);
     } else if (response[0].score < score) {
